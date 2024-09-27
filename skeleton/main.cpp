@@ -10,6 +10,7 @@
 
 #include <iostream>
 #include "Vector3D.h"
+#include "Particle.h"
 
 std::string display_text = "This is a test";
 
@@ -33,6 +34,8 @@ ContactReportCallback gContactReportCallback;
 
 RenderItem* xRenderItem = NULL, * yRenderItem = NULL, * zRenderItem = NULL, *originRenderItem = NULL;
 PxTransform x, y, z, origin;
+
+Particle* particle;
 
 // Initialize physics engine
 void initPhysics(bool interactive)
@@ -64,7 +67,7 @@ void initPhysics(bool interactive)
 	Vector3D yVector = Vector3D(0, 10, 0);
 	Vector3D zVector = Vector3D(0, 0, 10);
 
-	// Dibujo bola
+	// Dibujo bolas
 	origin = PxTransform(originVector.x(), originVector.y(), originVector.z());
 	x = PxTransform(xVector.x(), xVector.y(), xVector.z());
 	y = PxTransform(yVector.x(), yVector.y(), yVector.z());
@@ -73,6 +76,10 @@ void initPhysics(bool interactive)
 	xRenderItem = new RenderItem(CreateShape(PxSphereGeometry(1.0f)), &x, { 1.0, 0.0, 0.0, 1.0});
 	yRenderItem = new RenderItem(CreateShape(PxSphereGeometry(1.0f)), &y, { 0.0,1.0, 0.0, 1.0});
 	zRenderItem = new RenderItem(CreateShape(PxSphereGeometry(1.0f)), &z, { 0.0, 0.0, 1.0, 1.0});
+	
+
+	// Practica 1
+	particle = new Particle(Vector3( 0.0,0.0,0.0 ), Vector3(1.0, 0.0, 0.0), Vector3(1.0, 0.0, 0.0), 0.98);
 	
 }
 
@@ -86,6 +93,11 @@ void stepPhysics(bool interactive, double t)
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);
+
+
+	// Actualizo particula
+	//particle->integrate(t);
+	particle->integrateSemi(t);
 }
 
 // Function to clean data
@@ -110,6 +122,8 @@ void cleanupPhysics(bool interactive)
 	DeregisterRenderItem(xRenderItem);
 	DeregisterRenderItem(yRenderItem);
 	DeregisterRenderItem(zRenderItem);
+
+	delete particle;
 }
 
 // Function called when a key is pressed
