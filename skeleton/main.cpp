@@ -3,6 +3,8 @@
 #include <PxPhysicsAPI.h>
 
 #include <vector>
+#include <list>
+#include <iostream>
 
 #include "core.hpp"
 #include "RenderUtils.hpp"
@@ -11,11 +13,14 @@
 #include <iostream>
 #include "Vector3D.h"
 #include "Particle.h"
+#include "Projectile.h"
+//#include "./Render/Camera.h"
 
 std::string display_text = "This is a test";
 
 
 using namespace physx;
+using namespace std;
 
 PxDefaultAllocator		gAllocator;
 PxDefaultErrorCallback	gErrorCallback;
@@ -32,10 +37,12 @@ PxDefaultCpuDispatcher* gDispatcher = NULL;
 PxScene* gScene = NULL;
 ContactReportCallback gContactReportCallback;
 
-RenderItem* xRenderItem = NULL, * yRenderItem = NULL, * zRenderItem = NULL, *originRenderItem = NULL;
+RenderItem* xRenderItem = NULL, * yRenderItem = NULL, * zRenderItem = NULL, * originRenderItem = NULL;
 PxTransform x, y, z, origin;
 
 Particle* particle;
+//vector<Projectile*> projectiles;
+list<Projectile*> projectiles;
 
 // Initialize physics engine
 void initPhysics(bool interactive)
@@ -72,15 +79,18 @@ void initPhysics(bool interactive)
 	x = PxTransform(xVector.x(), xVector.y(), xVector.z());
 	y = PxTransform(yVector.x(), yVector.y(), yVector.z());
 	z = PxTransform(zVector.x(), zVector.y(), zVector.z());
-	originRenderItem = new RenderItem(CreateShape(PxSphereGeometry(1.0f)), &origin, { 1.0, 1.0, 1.0, 1.0});
-	xRenderItem = new RenderItem(CreateShape(PxSphereGeometry(1.0f)), &x, { 1.0, 0.0, 0.0, 1.0});
-	yRenderItem = new RenderItem(CreateShape(PxSphereGeometry(1.0f)), &y, { 0.0,1.0, 0.0, 1.0});
-	zRenderItem = new RenderItem(CreateShape(PxSphereGeometry(1.0f)), &z, { 0.0, 0.0, 1.0, 1.0});
-	
+	originRenderItem = new RenderItem(CreateShape(PxSphereGeometry(1.0f)), &origin, { 1.0, 1.0, 1.0, 1.0 });
+	xRenderItem = new RenderItem(CreateShape(PxSphereGeometry(1.0f)), &x, { 1.0, 0.0, 0.0, 1.0 });
+	yRenderItem = new RenderItem(CreateShape(PxSphereGeometry(1.0f)), &y, { 0.0,1.0, 0.0, 1.0 });
+	zRenderItem = new RenderItem(CreateShape(PxSphereGeometry(1.0f)), &z, { 0.0, 0.0, 1.0, 1.0 });
 
-	// Practica 1
-	particle = new Particle(Vector3( 0.0,0.0,0.0 ), Vector3(1.0, 0.0, 0.0), Vector3(1.0, 0.0, 0.0), 0.98);
-	
+
+	// Practica 1.1 [PARTICULAS]
+	particle = new Particle(Vector3(0.0, 0.0, 0.0), Vector3(1.0, 0.0, 0.0), Vector3(1.0, 0.0, 0.0), 0.98, { 1.0, 0.0, 1.0, 1.0 });
+
+
+
+
 }
 
 
@@ -98,6 +108,13 @@ void stepPhysics(bool interactive, double t)
 	// Actualizo particula
 	//particle->integrate(t);
 	particle->integrateSemi(t);
+
+	for (std::list<Projectile*>::iterator it = projectiles.begin(); it != projectiles.end(); ++it)
+		(*it)->integrateSemi(t);
+
+	/*for (int i = 0; i < projectiles.size(); i++) {
+		projectiles[i]->integrateSemi(t);
+	}*/
 }
 
 // Function to clean data
@@ -123,6 +140,7 @@ void cleanupPhysics(bool interactive)
 	DeregisterRenderItem(yRenderItem);
 	DeregisterRenderItem(zRenderItem);
 
+	projectiles.clear();
 	delete particle;
 }
 
@@ -135,6 +153,45 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	{
 		//case 'B': break;
 		//case ' ':	break;
+
+	case 'P':
+	{
+
+		// Practica 1.2 [PROYECTILES]
+		// Bola
+		Camera* cam = GetCamera();
+		Vector3 cPos = cam->getEye();
+		Vector3 cDir = cam->getDir();
+
+		float speed = 25.0f;
+		projectiles.push_back(new Projectile(cPos, cDir*speed, Vector3(0.0, -4.5, 0.0), 0.98, {1.0, 1.0, 0.0, 1.0}, 2));
+		cout << "X: " << cDir.x << "Y: " << cDir.y << "Z: " << cDir.z << endl;
+		break;
+	}
+	case 'B':
+	{
+		// Bala
+		Camera* cam = GetCamera();
+		Vector3 cPos = cam->getEye();
+		Vector3 cDir = cam->getDir();
+
+		float speed = 50.0f;
+		projectiles.push_back(new Projectile(cPos, cDir * speed, Vector3(0.0, -4.5, 0.0), 0.98, { 0.0, 1.0, 1.0, 1.0 }, 3));
+		cout << "X: " << cDir.x << "Y: " << cDir.y << "Z: " << cDir.z << endl;
+		break;
+	}
+	case 'N':
+	{
+		// Nieve
+		Camera* cam = GetCamera();
+		Vector3 cPos = cam->getEye();
+		Vector3 cDir = cam->getDir();
+
+		float speed = 7.0f;
+		projectiles.push_back(new Projectile(cPos, cDir * speed, Vector3(0.0, -1.5, 0.0), 0.98, { 1.0, 1.0, 1.0, 1.0 }, 3));
+		cout << "X: " << cDir.x << "Y: " << cDir.y << "Z: " << cDir.z << endl;
+		break;
+	}
 	case ' ':
 	{
 		break;
