@@ -12,6 +12,7 @@ public:
 	// Si devuelve booleano que te diga si la particula esta viva o no
 	void integrate(double t); // Euler
 	void integrateSemi(double t); // Euler semiimplicito
+	bool isAlive();
 
 protected:
 	Vector3 vel;

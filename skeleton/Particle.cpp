@@ -48,3 +48,11 @@ void Particle::integrateSemi(double t)
 	// Dumping
 	vel = vel * pow(d, t);
 }
+
+bool Particle::isAlive()
+{
+	if (pose.p.y <= 0)
+		alive = false;
+
+	return alive;
+}

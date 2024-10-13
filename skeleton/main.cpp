@@ -14,7 +14,6 @@
 #include "Vector3D.h"
 #include "Particle.h"
 #include "Projectile.h"
-//#include "./Render/Camera.h"
 
 std::string display_text = "This is a test";
 
@@ -41,8 +40,9 @@ RenderItem* xRenderItem = NULL, * yRenderItem = NULL, * zRenderItem = NULL, * or
 PxTransform x, y, z, origin;
 
 Particle* particle;
-//vector<Projectile*> projectiles;
 list<Projectile*> projectiles;
+list<Projectile*> diedProjectiles;
+
 
 // Initialize physics engine
 void initPhysics(bool interactive)
@@ -109,12 +109,18 @@ void stepPhysics(bool interactive, double t)
 	//particle->integrate(t);
 	particle->integrateSemi(t);
 
-	for (std::list<Projectile*>::iterator it = projectiles.begin(); it != projectiles.end(); ++it)
-		(*it)->integrateSemi(t);
+	std::list<Projectile*>::iterator it = projectiles.begin();
+	while ( it != projectiles.end()) {
 
-	/*for (int i = 0; i < projectiles.size(); i++) {
-		projectiles[i]->integrateSemi(t);
-	}*/
+		(*it)->integrateSemi(t);
+		if (!(*it)->isAlive()) {
+			delete (*it);
+			it = projectiles.erase(it);
+		}
+		else
+			++it;
+	}
+	
 }
 
 // Function to clean data
@@ -141,6 +147,7 @@ void cleanupPhysics(bool interactive)
 	DeregisterRenderItem(zRenderItem);
 
 	projectiles.clear();
+	diedProjectiles.clear();
 	delete particle;
 }
 
