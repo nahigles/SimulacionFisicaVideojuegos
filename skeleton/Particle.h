@@ -5,14 +5,13 @@
 class Particle
 {
 public:
-	Particle(Vector3 pos, Vector3 vel, Vector3 acel, double damping, Vector4 color);
+	Particle(Vector3 pos, Vector3 vel, Vector3 acel, double damping, Vector4 color, float size);
 	Particle() {};
 	~Particle();
 
-	// Si devuelve booleano que te diga si la particula esta viva o no
-	void integrate(double t); // Euler
-	void integrateSemi(double t); // Euler semiimplicito
 	bool isAlive();
+	inline double getLifeTime() const{ return lifeTime; }
+	void update(double t);
 
 protected:
 	Vector3 vel;
@@ -21,5 +20,12 @@ protected:
 	RenderItem* renderItem;
 	double d = 0.98; // dumping (Entre 0 y 1)
 	bool alive;
+	double lifeTime;
+
+
+	// METODOS
+	// Si devuelve booleano que te diga si la particula esta viva o no
+	void integrate(double t); // Euler
+	void integrateSemi(double t); // Euler semiimplicito
 };
 

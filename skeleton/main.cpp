@@ -14,6 +14,7 @@
 #include "Vector3D.h"
 #include "Particle.h"
 #include "Projectile.h"
+#include "ParticleSystem.h"
 
 std::string display_text = "This is a test";
 
@@ -41,7 +42,8 @@ PxTransform x, y, z, origin;
 
 Particle* particle;
 list<Projectile*> projectiles;
-list<Projectile*> diedProjectiles;
+
+ParticleSystem* particleSystem;
 
 
 // Initialize physics engine
@@ -86,10 +88,11 @@ void initPhysics(bool interactive)
 
 
 	// Practica 1.1 [PARTICULAS]
-	particle = new Particle(Vector3(0.0, 0.0, 0.0), Vector3(1.0, 0.0, 0.0), Vector3(1.0, 0.0, 0.0), 0.98, { 1.0, 0.0, 1.0, 1.0 });
+	particle = new Particle(Vector3(0.0, 0.0, 0.0), Vector3(1.0, 0.0, 0.0), Vector3(1.0, 0.0, 0.0), 0.98, { 1.0, 0.0, 1.0, 1.0 }, 1.0);
 
 
-
+	// Practica 2 [SISTEMA DE PARTICULAS]
+	particleSystem = new ParticleSystem({ 0.0,10.0,0.0 }, { 0.0, 8.0, 0.0 }, 2, { 0.0, 1.0, 0.56, 1.0 }, 7.0, 0.5);
 
 }
 
@@ -107,12 +110,12 @@ void stepPhysics(bool interactive, double t)
 
 	// Actualizo particula
 	//particle->integrate(t);
-	particle->integrateSemi(t);
+	particle->update(t);
 
 	std::list<Projectile*>::iterator it = projectiles.begin();
 	while ( it != projectiles.end()) {
 
-		(*it)->integrateSemi(t);
+		(*it)->update(t);
 		if (!(*it)->isAlive()) {
 			delete (*it);
 			it = projectiles.erase(it);
@@ -121,6 +124,8 @@ void stepPhysics(bool interactive, double t)
 			++it;
 	}
 	
+	particleSystem->update(t);
+
 }
 
 // Function to clean data
@@ -146,9 +151,12 @@ void cleanupPhysics(bool interactive)
 	DeregisterRenderItem(yRenderItem);
 	DeregisterRenderItem(zRenderItem);
 
+	for (std::list<Projectile*>::iterator it = projectiles.begin(); it != projectiles.end(); ++it)
+		delete (*it);
 	projectiles.clear();
-	diedProjectiles.clear();
+
 	delete particle;
+	delete  particleSystem;
 }
 
 // Function called when a key is pressed
@@ -171,7 +179,7 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		Vector3 cDir = cam->getDir();
 
 		float speed = 25.0f;
-		projectiles.push_back(new Projectile(cPos, cDir*speed, Vector3(0.0, -4.5, 0.0), 0.98, {1.0, 1.0, 0.0, 1.0}, 2));
+		projectiles.push_back(new Projectile(cPos, cDir*speed, Vector3(0.0, -4.5, 0.0), 0.98, {1.0, 1.0, 0.0, 1.0}, 2, 1.0f));
 		cout << "X: " << cDir.x << "Y: " << cDir.y << "Z: " << cDir.z << endl;
 		break;
 	}
@@ -183,7 +191,7 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		Vector3 cDir = cam->getDir();
 
 		float speed = 50.0f;
-		projectiles.push_back(new Projectile(cPos, cDir * speed, Vector3(0.0, -4.5, 0.0), 0.98, { 0.0, 1.0, 1.0, 1.0 }, 3));
+		projectiles.push_back(new Projectile(cPos, cDir * speed, Vector3(0.0, -4.5, 0.0), 0.98, { 0.0, 1.0, 1.0, 1.0 }, 3, 1.0f));
 		cout << "X: " << cDir.x << "Y: " << cDir.y << "Z: " << cDir.z << endl;
 		break;
 	}
@@ -195,7 +203,7 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		Vector3 cDir = cam->getDir();
 
 		float speed = 7.0f;
-		projectiles.push_back(new Projectile(cPos, cDir * speed, Vector3(0.0, -1.5, 0.0), 0.98, { 1.0, 1.0, 1.0, 1.0 }, 3));
+		projectiles.push_back(new Projectile(cPos, cDir * speed, Vector3(0.0, -1.5, 0.0), 0.98, { 1.0, 1.0, 1.0, 1.0 }, 3, 1.0f));
 		cout << "X: " << cDir.x << "Y: " << cDir.y << "Z: " << cDir.z << endl;
 		break;
 	}

@@ -5,14 +5,15 @@
 // PUBLIC
 
 // Constructor
-Particle::Particle(Vector3 pos, Vector3 vel, Vector3 acel, double damping, Vector4 color)
+Particle::Particle(Vector3 pos, Vector3 vel, Vector3 acel, double damping, Vector4 color,  float size)
 {
 	pose = physx::PxTransform(pos);
 	this->vel = vel;
 	this->acel = acel;
 	d = damping;
-	renderItem = new RenderItem(CreateShape(physx::PxSphereGeometry(1.0f)), &pose, color);
+	renderItem = new RenderItem(CreateShape(physx::PxSphereGeometry(size)), &pose, color);
 	alive = true;
+	lifeTime = 0;
 }
 
 // Destructor
@@ -55,4 +56,12 @@ bool Particle::isAlive()
 		alive = false;
 
 	return alive;
+}
+
+void Particle::update(double t)
+{
+	integrateSemi(t);
+
+	// Actualizo tiempo de vida
+	lifeTime += t;
 }
