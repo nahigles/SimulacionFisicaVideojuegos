@@ -43,7 +43,11 @@ PxTransform x, y, z, origin;
 Particle* particle;
 list<Projectile*> projectiles;
 
-ParticleSystem* particleSystem;
+list<ParticleSystem*> particleSystems;
+//ParticleSystem* particleSystem;
+//ParticleSystem* particleSystem1;
+//ParticleSystem* particleSystem2;
+//ParticleSystem* particleSystem3;
 
 
 // Initialize physics engine
@@ -92,7 +96,10 @@ void initPhysics(bool interactive)
 
 
 	// Practica 2 [SISTEMA DE PARTICULAS]
-	particleSystem = new ParticleSystem({ 0.0,10.0,0.0 }, { 0.0, 8.0, 0.0 }, 2, { 0.0, 1.0, 0.56, 1.0 }, 7.0, 0.5);
+	/*particleSystem = new ParticleSystem({ 0.0,10.0,0.0 }, { 0.0, 8.0, 0.0 }, 2, { 0.0, 1.0, 0.56, 1.0 }, 7.0, 0.5, 5, 15, BALLS);
+	particleSystem1 = new ParticleSystem({ 0.0,30.0,0.0 }, { 0.0, -10.0, 0.0 }, 0.25, { 0.0, 0.56, 0.9, 0.3 }, 9.0, 0.05, 20, 5, RAIN);
+	particleSystem2 = new ParticleSystem({ 0.0,50.0,0.0 }, { 0.0, -10.0, 0.0 }, 0.5, { 1.0, 1.0, 1.0, 1.0 }, 9.0, 0.05, 20, 5, SNOW);
+	particleSystem3 = new ParticleSystem({ 0.0,50.0,0.0 }, { 10.0, 10.0, 0.0 }, 4, { 1.0, 1.0, 1.0, 1.0 }, 9.0, 0.05, 5, 15, FOAM);*/
 
 }
 
@@ -113,7 +120,7 @@ void stepPhysics(bool interactive, double t)
 	particle->update(t);
 
 	std::list<Projectile*>::iterator it = projectiles.begin();
-	while ( it != projectiles.end()) {
+	while (it != projectiles.end()) {
 
 		(*it)->update(t);
 		if (!(*it)->isAlive()) {
@@ -123,8 +130,19 @@ void stepPhysics(bool interactive, double t)
 		else
 			++it;
 	}
-	
-	particleSystem->update(t);
+
+	// Sistema de particulas
+	std::list<ParticleSystem*>::iterator it2 = particleSystems.begin();
+	while (it2 != particleSystems.end()) {
+
+		(*it2)->update(t);
+		++it2;
+	}
+
+	//particleSystem->update(t);
+	//particleSystem1->update(t);
+	//particleSystem2->update(t);
+	//particleSystem3->update(t);
 
 }
 
@@ -156,7 +174,14 @@ void cleanupPhysics(bool interactive)
 	projectiles.clear();
 
 	delete particle;
-	delete  particleSystem;
+
+	for (std::list<ParticleSystem*>::iterator it = particleSystems.begin(); it != particleSystems.end(); ++it)
+		delete (*it);
+	particleSystems.clear();
+	//delete  particleSystem;
+	//delete  particleSystem1;
+	//delete  particleSystem2;
+	//delete  particleSystem3;
 }
 
 // Function called when a key is pressed
@@ -168,7 +193,25 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	{
 		//case 'B': break;
 		//case ' ':	break;
+	case 'Q':
+	{
+		particleSystems.push_back(new ParticleSystem({ 0.0,10.0,0.0 }, { 0.0, 8.0, 0.0 }, 2, { 0.0, 1.0, 0.56, 1.0 }, 7.0, 0.5, 5, 15, BALLS));
+		break;
+	}
+	case 'T': {
+		particleSystems.push_back(new ParticleSystem({ 0.0,30.0,0.0 }, { 0.0, -10.0, 0.0 }, 0.25, { 0.0, 0.56, 0.9, 0.3 }, 9.0, 0.05, 20, 5, RAIN));
 
+		break;
+	}
+	case 'E': {
+		particleSystems.push_back(new ParticleSystem({ 0.0,50.0,0.0 }, { 0.0, -10.0, 0.0 }, 0.5, { 1.0, 1.0, 1.0, 1.0 }, 9.0, 0.05, 20, 5, SNOW));
+		break;
+	}
+	case 'R':
+	{
+		particleSystems.push_back(new ParticleSystem({ 0.0,50.0,0.0 }, { 10.0, 10.0, 0.0 }, 4, { 1.0, 1.0, 1.0, 1.0 }, 9.0, 0.05, 5, 15, FOAM));
+		break;
+	}
 	case 'P':
 	{
 
@@ -179,7 +222,7 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		Vector3 cDir = cam->getDir();
 
 		float speed = 25.0f;
-		projectiles.push_back(new Projectile(cPos, cDir*speed, Vector3(0.0, -4.5, 0.0), 0.98, {1.0, 1.0, 0.0, 1.0}, 2, 1.0f));
+		projectiles.push_back(new Projectile(cPos, cDir * speed, Vector3(0.0, -4.5, 0.0), 0.98, { 1.0, 1.0, 0.0, 1.0 }, 2, 1.0f));
 		cout << "X: " << cDir.x << "Y: " << cDir.y << "Z: " << cDir.z << endl;
 		break;
 	}

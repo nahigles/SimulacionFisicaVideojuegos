@@ -5,19 +5,64 @@ void ParticleSystem::createParticle()
 {
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::uniform_int_distribution<> distr(randMin, randMax);
+	std::uniform_int_distribution<> distr(randMinVel, randMaxVel);
+	std::uniform_int_distribution<> distrPos(randMinPos, randMaxPos);
 
-	// Posicion aleatoria (tengo q hacerla aleatorria todavia)
-	Vector3 posRandom = initialpos;
+	Vector3 posRandom;
+	Vector3 randomVel;
 
-	// Velocidad aleatoria
-	Vector3 randomVel = Vector3(distr(gen), distr(gen), distr(gen));
-	randomVel = randomVel + initialVel;
+	switch (type)
+	{
+	case RAIN:
+		// Posicion aleatoria
+		posRandom = Vector3(distrPos(gen), 0.0, distrPos(gen));
+		posRandom = posRandom + initialpos;
+
+		// Velocidad aleatoria
+		randomVel = Vector3(distr(gen), distr(gen), distr(gen));
+		randomVel = randomVel + initialVel;
+		break;
+	case BALLS: {
+
+		// Posicion aleatoria
+		posRandom = Vector3(distrPos(gen), distrPos(gen), distrPos(gen));
+		posRandom = posRandom + initialpos;
+
+		// Velocidad aleatoria
+		randomVel = Vector3(distr(gen), distr(gen), distr(gen));
+		randomVel = randomVel + initialVel;
+		break;
+	}
+	case SNOW: {
+
+		// Posicion aleatoria
+		posRandom = Vector3(distrPos(gen), 0.0, distrPos(gen));
+		posRandom = posRandom + initialpos;
+
+		// Velocidad aleatoria
+		randomVel = Vector3(distr(gen), distr(gen), distr(gen));
+		randomVel = randomVel + initialVel;
+		break;
+	}
+	case FOAM: {
+
+		// Posicion aleatoria
+		posRandom = Vector3(distrPos(gen), 0.0, distrPos(gen));
+		posRandom = posRandom + initialpos;
+
+		// Velocidad aleatoria
+		randomVel = Vector3(0.0, distr(gen), 0.0);
+		randomVel = randomVel + initialVel;
+		break;
+	}
+	default:
+		break;
+	}
 
 	particles.push_back(new Particle(posRandom, randomVel, { 0.0,-10.0,0.0 }, 0.98, initialColor, initialSize));
 }
 
-ParticleSystem::ParticleSystem(Vector3 pos, Vector3 vel, int size, Vector4 color, double lifeTime, double timeBetween)
+ParticleSystem::ParticleSystem(Vector3 pos, Vector3 vel, float size, Vector4 color, double lifeTime, double timeBetween, double randomPos, double randomVel, ParticleType pType)
 {
 	initialpos = pos;
 	initialVel = vel;
@@ -26,6 +71,12 @@ ParticleSystem::ParticleSystem(Vector3 pos, Vector3 vel, int size, Vector4 color
 	initialLifeTime = lifeTime;
 	timeBetweenParticles = timeBetween;
 	timeCont = timeBetween;
+	randMaxPos = randomPos;
+	randMinPos = -randomPos;
+	randMaxVel = randomVel;
+	randMinVel = -randomVel;
+	type = pType;
+
 }
 
 ParticleSystem::~ParticleSystem()
