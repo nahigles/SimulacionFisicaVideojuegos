@@ -4,12 +4,17 @@
 #include "Particle.h"
 #include "RenderUtils.hpp"
 #include <random>
+#include <cmath>
+#include <iomanip>
+#include <map>
+#include <string>
 
 enum ParticleType {
 	RAIN,
 	BALLS,
 	SNOW,
 	FOAM,
+	COLOURFULL,
 	LAST_ELEM
 };
 
@@ -39,6 +44,17 @@ protected:
 
 	// Variables auxiliares
 	double timeCont; // Contador del tiempo que ha pasado
+
+	// Colores auxiliares
+	int indexColor;
+	std::vector<Vector4> colors = { {1.0,1.0,1.0,1.0},
+	{0.0,0.0,0.0,1.0}, 
+	{1.0,0.0,0.0,1.0}, 
+	{0.0,1.0,0.0,1.0}, 
+	{0.0,0.0,1.0,1.0},
+	{1.0,1.0,0.0,1.0}, 
+	{0.0,1.0,1.0,1.0}, 
+	{1.0,0.0,1.0,1.0} };
 
 
 	// METODOS

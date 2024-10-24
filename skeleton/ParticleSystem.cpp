@@ -3,10 +3,14 @@
 
 void ParticleSystem::createParticle()
 {
+	// Distribucion uniforme
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	std::uniform_int_distribution<> distr(randMinVel, randMaxVel);
 	std::uniform_int_distribution<> distrPos(randMinPos, randMaxPos);
+
+	// Distribucion normal
+	std::normal_distribution<> d{ 5.0, 10.0 };
 
 	Vector3 posRandom;
 	Vector3 randomVel;
@@ -55,6 +59,20 @@ void ParticleSystem::createParticle()
 		randomVel = randomVel + initialVel;
 		break;
 	}
+	case COLOURFULL: {
+
+		// Posicion aleatoria
+		posRandom = Vector3(d(gen), d(gen), d(gen));
+		posRandom = posRandom + initialpos;
+
+		// Velocidad aleatoria
+		randomVel = Vector3(d(gen), d(gen), d(gen));
+		randomVel = randomVel + initialVel;
+		initialColor = colors.at(indexColor);
+		indexColor = (indexColor + 1) % colors.size();
+		
+		break;
+	}
 	default:
 		break;
 	}
@@ -77,6 +95,7 @@ ParticleSystem::ParticleSystem(Vector3 pos, Vector3 vel, Vector3 acel, float siz
 	randMaxVel = randomVel;
 	randMinVel = -randomVel;
 	type = pType;
+	indexColor = 0;
 
 }
 

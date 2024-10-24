@@ -106,7 +106,8 @@ void stepPhysics(bool interactive, double t)
 
 	// Actualizo particula
 	//particle->integrate(t);
-	particle->update(t);
+	if (particle != nullptr)
+		particle->update(t);
 
 	std::list<Projectile*>::iterator it = projectiles.begin();
 	while (it != projectiles.end()) {
@@ -147,19 +148,54 @@ void cleanupPhysics(bool interactive)
 	gFoundation->release();
 
 	// Importante Deregistear
-	DeregisterRenderItem(originRenderItem);
-	DeregisterRenderItem(xRenderItem);
-	DeregisterRenderItem(yRenderItem);
-	DeregisterRenderItem(zRenderItem);
+	//DeregisterRenderItem(originRenderItem);
+	//DeregisterRenderItem(xRenderItem);
+	//DeregisterRenderItem(yRenderItem);
+	//DeregisterRenderItem(zRenderItem);
 
-	for (std::list<Projectile*>::iterator it = projectiles.begin(); it != projectiles.end(); ++it)
+	//for (std::list<Projectile*>::iterator it = projectiles.begin(); it != projectiles.end(); ++it)
+	//	delete (*it);
+	//projectiles.clear();
+
+	//delete particle;
+
+	//for (std::list<ParticleSystem*>::iterator it = particleSystems.begin(); it != particleSystems.end(); ++it)
+	//	delete (*it);
+	//particleSystems.clear();
+
+			// Borra todo
+	if (originRenderItem != nullptr) {
+		DeregisterRenderItem(originRenderItem);
+		originRenderItem = nullptr;
+	}
+	if (xRenderItem != nullptr) {
+		DeregisterRenderItem(xRenderItem);
+		xRenderItem = nullptr;
+	}
+	if (yRenderItem != nullptr) {
+		DeregisterRenderItem(yRenderItem);
+		yRenderItem = nullptr;
+	}
+	if (zRenderItem != nullptr) {
+		DeregisterRenderItem(zRenderItem);
+		zRenderItem = nullptr;
+	}
+
+	for (std::list<Projectile*>::iterator it = projectiles.begin(); it != projectiles.end();) {
 		delete (*it);
+		it = projectiles.erase(it);
+	}
 	projectiles.clear();
 
-	delete particle;
+	if (particle != nullptr) {
+		delete particle;
+		particle = nullptr;
+	}
 
-	for (std::list<ParticleSystem*>::iterator it = particleSystems.begin(); it != particleSystems.end(); ++it)
+	for (std::list<ParticleSystem*>::iterator it = particleSystems.begin(); it != particleSystems.end();) {
 		delete (*it);
+		it = particleSystems.erase(it);
+	}
 	particleSystems.clear();
 }
 
@@ -179,20 +215,63 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		break;
 	}
 	case 'T': {
-		// NIEVE
+		// LLUVIA
 		particleSystems.push_back(new ParticleSystem({ 0.0,30.0,0.0 }, { 0.0, -10.0, 0.0 }, { 0.0, -15.0, 0.0 }, 0.25, { 0.0, 0.56, 0.9, 0.3 }, 9.0, 0.05, 20, 5, RAIN));
 
 		break;
 	}
 	case 'E': {
-		// LLUVIA
-		particleSystems.push_back(new ParticleSystem({ 0.0,50.0,0.0 }, { 0.0, -10.0, 0.0 }, { 0.0, -10.0, 0.0 }, 0.5, { 1.0, 1.0, 1.0, 0.0 }, 9.0, 0.05, 20, 5, SNOW));
+		// NIEVE
+		particleSystems.push_back(new ParticleSystem({ 0.0,50.0,0.0 }, { 0.0, -10.0, 0.0 }, { 0.0, -1.0, 0.0 }, 0.5, { 1.0, 1.0, 1.0, 0.0 }, 9.0, 0.05, 20, 5, SNOW));
 		break;
 	}
 	case 'R':
 	{
 		// ESPUMA
 		particleSystems.push_back(new ParticleSystem({ 0.0,50.0,0.0 }, { 10.0, 10.0, 0.0 }, { 0.0, -10.0, 0.0 }, 4, { 1.0, 1.0, 1.0, 1.0 }, 9.0, 0.05, 5, 15, FOAM));
+		break;
+	}
+	case 'Y':
+	{
+		// BOLAS COLORIDAS
+		particleSystems.push_back(new ParticleSystem({ 0.0,50.0,0.0 }, { 10.0, 10.0, 0.0 }, { 0.0, -10.0, 0.0 }, 3, { 1.0, 1.0, 1.0, 1.0 }, 9.0, 0.05, 5, 15, COLOURFULL));
+		break;
+	}
+	case 'M':
+	{
+		// Borra todo
+		if (originRenderItem != nullptr) {
+			DeregisterRenderItem(originRenderItem);
+			originRenderItem = nullptr;
+		}
+		if (xRenderItem != nullptr) {
+			DeregisterRenderItem(xRenderItem);
+			xRenderItem = nullptr;
+		}
+		if (yRenderItem != nullptr) {
+			DeregisterRenderItem(yRenderItem);
+			yRenderItem = nullptr;
+		}
+		if (zRenderItem != nullptr) {
+			DeregisterRenderItem(zRenderItem);
+			zRenderItem = nullptr;
+		}
+
+		for (std::list<Projectile*>::iterator it = projectiles.begin(); it != projectiles.end();) {
+			delete (*it);
+			it = projectiles.erase(it);
+		}
+
+		if (particle != nullptr) {
+			delete particle;
+			particle = nullptr;
+		}
+
+		for (std::list<ParticleSystem*>::iterator it = particleSystems.begin(); it != particleSystems.end();) {
+			delete (*it);
+			it = particleSystems.erase(it);
+		}
+
 		break;
 	}
 	case 'P':
