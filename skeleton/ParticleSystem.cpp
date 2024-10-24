@@ -59,13 +59,14 @@ void ParticleSystem::createParticle()
 		break;
 	}
 
-	particles.push_back(new Particle(posRandom, randomVel, { 0.0,-10.0,0.0 }, 0.98, initialColor, initialSize));
+	particles.push_back(new Particle(posRandom, randomVel, initialAcel, 0.98, initialColor, initialSize));
 }
 
-ParticleSystem::ParticleSystem(Vector3 pos, Vector3 vel, float size, Vector4 color, double lifeTime, double timeBetween, double randomPos, double randomVel, ParticleType pType)
+ParticleSystem::ParticleSystem(Vector3 pos, Vector3 vel, Vector3 acel, float size, Vector4 color, double lifeTime, double timeBetween, double randomPos, double randomVel, ParticleType pType)
 {
 	initialpos = pos;
 	initialVel = vel;
+	initialAcel = acel;
 	initialSize = size;
 	initialColor = color;
 	initialLifeTime = lifeTime;

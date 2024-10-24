@@ -43,11 +43,7 @@ PxTransform x, y, z, origin;
 Particle* particle;
 list<Projectile*> projectiles;
 
-list<ParticleSystem*> particleSystems;
-//ParticleSystem* particleSystem;
-//ParticleSystem* particleSystem1;
-//ParticleSystem* particleSystem2;
-//ParticleSystem* particleSystem3;
+list<ParticleSystem*> particleSystems; // SISTEMA DE PARTICULAS
 
 
 // Initialize physics engine
@@ -94,13 +90,6 @@ void initPhysics(bool interactive)
 	// Practica 1.1 [PARTICULAS]
 	particle = new Particle(Vector3(0.0, 0.0, 0.0), Vector3(1.0, 0.0, 0.0), Vector3(1.0, 0.0, 0.0), 0.98, { 1.0, 0.0, 1.0, 1.0 }, 1.0);
 
-
-	// Practica 2 [SISTEMA DE PARTICULAS]
-	/*particleSystem = new ParticleSystem({ 0.0,10.0,0.0 }, { 0.0, 8.0, 0.0 }, 2, { 0.0, 1.0, 0.56, 1.0 }, 7.0, 0.5, 5, 15, BALLS);
-	particleSystem1 = new ParticleSystem({ 0.0,30.0,0.0 }, { 0.0, -10.0, 0.0 }, 0.25, { 0.0, 0.56, 0.9, 0.3 }, 9.0, 0.05, 20, 5, RAIN);
-	particleSystem2 = new ParticleSystem({ 0.0,50.0,0.0 }, { 0.0, -10.0, 0.0 }, 0.5, { 1.0, 1.0, 1.0, 1.0 }, 9.0, 0.05, 20, 5, SNOW);
-	particleSystem3 = new ParticleSystem({ 0.0,50.0,0.0 }, { 10.0, 10.0, 0.0 }, 4, { 1.0, 1.0, 1.0, 1.0 }, 9.0, 0.05, 5, 15, FOAM);*/
-
 }
 
 
@@ -138,12 +127,6 @@ void stepPhysics(bool interactive, double t)
 		(*it2)->update(t);
 		++it2;
 	}
-
-	//particleSystem->update(t);
-	//particleSystem1->update(t);
-	//particleSystem2->update(t);
-	//particleSystem3->update(t);
-
 }
 
 // Function to clean data
@@ -178,10 +161,6 @@ void cleanupPhysics(bool interactive)
 	for (std::list<ParticleSystem*>::iterator it = particleSystems.begin(); it != particleSystems.end(); ++it)
 		delete (*it);
 	particleSystems.clear();
-	//delete  particleSystem;
-	//delete  particleSystem1;
-	//delete  particleSystem2;
-	//delete  particleSystem3;
 }
 
 // Function called when a key is pressed
@@ -195,21 +174,25 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		//case ' ':	break;
 	case 'Q':
 	{
-		particleSystems.push_back(new ParticleSystem({ 0.0,10.0,0.0 }, { 0.0, 8.0, 0.0 }, 2, { 0.0, 1.0, 0.56, 1.0 }, 7.0, 0.5, 5, 15, BALLS));
+		// LANZADOR DE BOLAS
+		particleSystems.push_back(new ParticleSystem({ 0.0,10.0,0.0 }, { 0.0, 8.0, 0.0 }, { 0.0, -5.0, 0.0 }, 2, { 0.0, 1.0, 0.56, 1.0 }, 7.0, 0.5, 5, 15, BALLS));
 		break;
 	}
 	case 'T': {
-		particleSystems.push_back(new ParticleSystem({ 0.0,30.0,0.0 }, { 0.0, -10.0, 0.0 }, 0.25, { 0.0, 0.56, 0.9, 0.3 }, 9.0, 0.05, 20, 5, RAIN));
+		// NIEVE
+		particleSystems.push_back(new ParticleSystem({ 0.0,30.0,0.0 }, { 0.0, -10.0, 0.0 }, { 0.0, -15.0, 0.0 }, 0.25, { 0.0, 0.56, 0.9, 0.3 }, 9.0, 0.05, 20, 5, RAIN));
 
 		break;
 	}
 	case 'E': {
-		particleSystems.push_back(new ParticleSystem({ 0.0,50.0,0.0 }, { 0.0, -10.0, 0.0 }, 0.5, { 1.0, 1.0, 1.0, 1.0 }, 9.0, 0.05, 20, 5, SNOW));
+		// LLUVIA
+		particleSystems.push_back(new ParticleSystem({ 0.0,50.0,0.0 }, { 0.0, -10.0, 0.0 }, { 0.0, -10.0, 0.0 }, 0.5, { 1.0, 1.0, 1.0, 0.0 }, 9.0, 0.05, 20, 5, SNOW));
 		break;
 	}
 	case 'R':
 	{
-		particleSystems.push_back(new ParticleSystem({ 0.0,50.0,0.0 }, { 10.0, 10.0, 0.0 }, 4, { 1.0, 1.0, 1.0, 1.0 }, 9.0, 0.05, 5, 15, FOAM));
+		// ESPUMA
+		particleSystems.push_back(new ParticleSystem({ 0.0,50.0,0.0 }, { 10.0, 10.0, 0.0 }, { 0.0, -10.0, 0.0 }, 4, { 1.0, 1.0, 1.0, 1.0 }, 9.0, 0.05, 5, 15, FOAM));
 		break;
 	}
 	case 'P':

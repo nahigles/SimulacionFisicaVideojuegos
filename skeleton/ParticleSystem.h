@@ -27,6 +27,7 @@ protected:
 	// Atributos
 	Vector3 initialpos;
 	Vector3 initialVel;
+	Vector3 initialAcel;
 	float initialSize;
 	Vector4 initialColor;
 	//physx::PxGeometry initialShape;
@@ -45,7 +46,7 @@ protected:
 
 public:
 	// Contructora
-	ParticleSystem(Vector3 pos, Vector3 vel, float size, Vector4 color, double lifeTime, double timeBetween, double randomPos, double randomVel, ParticleType pType);
+	ParticleSystem(Vector3 pos, Vector3 vel,Vector3 acel, float size, Vector4 color, double lifeTime, double timeBetween, double randomPos, double randomVel, ParticleType pType);
 	~ParticleSystem();
 	void update(double t);
 
