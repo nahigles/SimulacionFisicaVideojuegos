@@ -78,9 +78,10 @@ void ParticleSystem::createParticle()
 	}
 
 	particles.push_back(new Particle(posRandom, randomVel, initialAcel, 0.98, initialColor, initialSize));
+	nParticles++;
 }
 
-ParticleSystem::ParticleSystem(Vector3 pos, Vector3 vel, Vector3 acel, float size, Vector4 color, double lifeTime, double timeBetween, double randomPos, double randomVel, ParticleType pType)
+ParticleSystem::ParticleSystem(Vector3 pos, Vector3 vel, Vector3 acel, float size, Vector4 color, double lifeTime, double timeBetween, double randomPos, double randomVel, ParticleType pType, int maxParticles)
 {
 	initialpos = pos;
 	initialVel = vel;
@@ -96,7 +97,8 @@ ParticleSystem::ParticleSystem(Vector3 pos, Vector3 vel, Vector3 acel, float siz
 	randMinVel = -randomVel;
 	type = pType;
 	indexColor = 0;
-
+	maxNumParticle = maxParticles;
+	nParticles = 0;
 }
 
 ParticleSystem::~ParticleSystem()
@@ -116,13 +118,14 @@ void ParticleSystem::update(double t)
 		if (!(*it)->isAlive() || (*it)->getLifeTime() >= initialLifeTime) {
 			delete (*it);
 			it = particles.erase(it);
+			nParticles--;
 		}
 		else
 			++it;
 	}
 
 	// Creacion de particulas
-	if (timeCont >= timeBetweenParticles) {
+	if (timeCont >= timeBetweenParticles && nParticles <= maxNumParticle) {
 		createParticle();
 		timeCont = 0;
 	}

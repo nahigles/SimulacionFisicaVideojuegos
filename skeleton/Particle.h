@@ -16,6 +16,7 @@ public:
 protected:
 	Vector3 vel;
 	Vector3 acel;
+	Vector3 force;
 	physx::PxTransform pose;
 	RenderItem* renderItem;
 	double d = 0.98; // dumping (Entre 0 y 1)

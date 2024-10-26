@@ -28,6 +28,8 @@ protected:
 	double randMaxPos = 5;
 	double timeBetweenParticles;
 	ParticleType type;
+	int maxNumParticle;
+	int nParticles;
 
 	// Atributos
 	Vector3 initialpos;
@@ -62,7 +64,7 @@ protected:
 
 public:
 	// Contructora
-	ParticleSystem(Vector3 pos, Vector3 vel,Vector3 acel, float size, Vector4 color, double lifeTime, double timeBetween, double randomPos, double randomVel, ParticleType pType);
+	ParticleSystem(Vector3 pos, Vector3 vel,Vector3 acel, float size, Vector4 color, double lifeTime, double timeBetween, double randomPos, double randomVel, ParticleType pType, int maxParticles = 3000);
 	~ParticleSystem();
 	void update(double t);
 
