@@ -5,6 +5,7 @@
 #include "ParticleSystem.h"
 #include <list>
 #include <iostream>
+#include "GravityForceGenerator.h"
 
 using namespace physx;
 using namespace std;
@@ -27,10 +28,18 @@ protected:
 	RenderItem* xRenderItem = NULL, * yRenderItem = NULL, * zRenderItem = NULL, * originRenderItem = NULL;
 	PxTransform x, y, z, origin;
 
-	Particle* particle;
+	Particle* particle = nullptr;
+	Particle* particleG1 = nullptr;
+	Particle* particleG2 = nullptr;
+
 	list<Projectile*> projectiles;
 
 	list<ParticleSystem*> particleSystems; // SISTEMA DE PARTICULAS
+
+	// Gravedad
+	GravityForceGenerator* gravityForceGenerator = nullptr;
+
+
 public:
 	Game();
 	void nextState();

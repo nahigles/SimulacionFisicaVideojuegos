@@ -5,6 +5,7 @@ Game::Game()
 {
 	_state = START;
 	_nextState = START;
+	gravityForceGenerator = new GravityForceGenerator(10.0f); // Pongo gravedad
 }
 
 void Game::nextState()
@@ -41,7 +42,7 @@ void Game::update(double t)
 
 
 			// Practica 1.1 [PARTICULAS]
-			particle = new Particle(Vector3(0.0, 0.0, 0.0), Vector3(1.0, 0.0, 0.0), Vector3(1.0, 0.0, 0.0), 0.98, { 1.0, 0.0, 1.0, 1.0 }, 1.0);
+			particle = new Particle(Vector3(0.0, 0.0, 0.0), Vector3(1.0, 0.0, 0.0), Vector3(1.0, 0.0, 0.0), 0.98, { 1.0, 0.0, 1.0, 1.0 }, 1.0, 3);
 			break;
 		}
 		case END:
@@ -63,6 +64,10 @@ void Game::update(double t)
 		// Actualizo particula
 		if (particle != nullptr)
 			particle->update(t);
+		if (particleG1 != nullptr)
+			particleG1->update(t);
+		if (particleG2 != nullptr)
+			particleG2->update(t);
 
 		std::list<Projectile*>::iterator it = projectiles.begin();
 		while (it != projectiles.end()) {
@@ -125,7 +130,16 @@ void Game::keyPressed(unsigned char key)
 	case 'Y':
 	{
 		// BOLAS COLORIDAS
-		particleSystems.push_back(new ParticleSystem({ 0.0,50.0,0.0 }, { 10.0, 10.0, 0.0 }, { 0.0, -10.0, 0.0 }, 3, { 1.0, 1.0, 1.0, 1.0 }, 9.0, 0.05, 5, 15, COLOURFULL));
+		particleSystems.push_back(new ParticleSystem({ 0.0,50.0,0.0 }, { 10.0, 10.0, 0.0 }, { 0.0, 0.0, 0.0 }/*{ 0.0, -10.0, 0.0 }*/, 3, { 1.0, 1.0, 1.0, 1.0 }, 9.0, 0.05, 5, 15, COLOURFULL));
+		break;
+	}
+	// GRAVITY TESTER
+	case 'G':
+	{
+		particleG1 = new Particle(Vector3(-10.0, 50.0, 0.0), Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 0.0), 0.98, { 0.0, 1.0, 1.0, 1.0 }, 4.0, 1);
+		particleG1->addForceGenerator(gravityForceGenerator);
+		particleG2 = new Particle(Vector3(10.0, 50.0, 0.0), Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 0.0), 0.98, { 1.0, 1.0, 0.0, 1.0 }, 4.0, 4);
+		particleG2->addForceGenerator(gravityForceGenerator);
 		break;
 	}
 	case 'M':
@@ -180,6 +194,10 @@ void Game::keyPressed(unsigned char key)
 Game::~Game()
 {
 	deleteAll();
+
+	// Borra Generador de Gravedad
+	delete gravityForceGenerator;
+	gravityForceGenerator = nullptr;
 }
 
 void Game::deleteAll()
@@ -211,10 +229,20 @@ void Game::deleteAll()
 		delete particle;
 		particle = nullptr;
 	}
+	if (particleG1 != nullptr) {
+		delete particleG1;
+		particleG1 = nullptr;
+	}
+	if (particleG2 != nullptr) {
+		delete particleG2;
+		particleG2 = nullptr;
+	}
 
 	for (std::list<ParticleSystem*>::iterator it = particleSystems.begin(); it != particleSystems.end();) {
 		delete (*it);
 		it = particleSystems.erase(it);
 	}
+
+
 
 }

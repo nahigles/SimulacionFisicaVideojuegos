@@ -8,6 +8,7 @@
 #include <iomanip>
 #include <map>
 #include <string>
+#include "GravityForceGenerator.h"
 
 enum ParticleType {
 	RAIN,

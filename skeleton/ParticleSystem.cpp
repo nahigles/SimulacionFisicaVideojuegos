@@ -75,9 +75,14 @@ void ParticleSystem::createParticle()
 	}
 	default:
 		break;
+		break;
 	}
 
-	particles.push_back(new Particle(posRandom, randomVel, initialAcel, 0.98, initialColor, initialSize));
+	double masaParticula = 3;
+	Particle* p = new Particle(posRandom, randomVel, initialAcel, 0.98, initialColor, initialSize, masaParticula);
+	GravityForceGenerator* gGenerator = new GravityForceGenerator(17.0f); // TENGO Q HACER DELETE EN ALGUN MOMENTO
+	p->addForceGenerator(gGenerator);
+	particles.push_back(p);
 	nParticles++;
 }
 
@@ -85,7 +90,8 @@ ParticleSystem::ParticleSystem(Vector3 pos, Vector3 vel, Vector3 acel, float siz
 {
 	initialpos = pos;
 	initialVel = vel;
-	initialAcel = acel;
+	//initialAcel = acel;
+	initialAcel = Vector3(0,0,0); // PARA PROBAR SI REALMENTE FUNCIONA BIEN
 	initialSize = size;
 	initialColor = color;
 	initialLifeTime = lifeTime;
