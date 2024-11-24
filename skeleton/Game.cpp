@@ -6,6 +6,7 @@ Game::Game()
 	_state = START;
 	_nextState = START;
 	gravityForceGenerator = new GravityForceGenerator(10.0f); // Pongo gravedad
+	gravityForceGenerator2 = new GravityForceGenerator(-10.0f); // Pongo gravedad
 }
 
 void Game::nextState()
@@ -21,7 +22,8 @@ void Game::update(double t)
 		switch (_state)
 		{
 		case START:
-			cout << "START" << endl;
+			gravityForceGenerator = new GravityForceGenerator(10.0f); // Pongo gravedad
+			gravityForceGenerator2 = new GravityForceGenerator(-10.0f); // Pongo gravedad
 			break;
 		case GAME: {
 			// Practica 0
@@ -42,11 +44,18 @@ void Game::update(double t)
 
 
 			// Practica 1.1 [PARTICULAS]
-			particle = new Particle(Vector3(0.0, 0.0, 0.0), Vector3(1.0, 0.0, 0.0), Vector3(1.0, 0.0, 0.0), 0.98, { 1.0, 0.0, 1.0, 1.0 }, 1.0, 3);
+			particulas.push_back( new Particle(Vector3(0.0, 0.0, 0.0), Vector3(1.0, 0.0, 0.0), Vector3(1.0, 0.0, 0.0), 0.98, { 1.0, 0.0, 1.0, 1.0 }, 1.0, 3));
 			break;
 		}
 		case END:
 			deleteAll();
+
+			// Borra Generadores de Gravedad
+			if (gravityForceGenerator != nullptr)
+				gravityForceGenerator = nullptr;
+			if (gravityForceGenerator2 != nullptr)
+				gravityForceGenerator2 = nullptr;
+
 			break;
 		case LAST_STATE:
 			break;
@@ -62,12 +71,24 @@ void Game::update(double t)
 	case GAME: {
 
 		// Actualizo particula
-		if (particle != nullptr)
-			particle->update(t);
-		if (particleG1 != nullptr)
-			particleG1->update(t);
-		if (particleG2 != nullptr)
-			particleG2->update(t);
+		//if (particle != nullptr)
+		//	particle->update(t);
+		//if (particleG1 != nullptr)
+		//	particleG1->update(t);
+		//if (particleG2 != nullptr)
+		//	particleG2->update(t);
+
+		std::list<Particle*>::iterator itP = particulas.begin();
+		while (itP != particulas.end()) {
+
+			(*itP)->update(t);
+			if (!(*itP)->isAlive()) {
+				delete (*itP);
+				itP = particulas.erase(itP);
+			}
+			else
+				++itP;
+		}
 
 		std::list<Projectile*>::iterator it = projectiles.begin();
 		while (it != projectiles.end()) {
@@ -136,10 +157,25 @@ void Game::keyPressed(unsigned char key)
 	// GRAVITY TESTER
 	case 'G':
 	{
-		particleG1 = new Particle(Vector3(-10.0, 50.0, 0.0), Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 0.0), 0.98, { 0.0, 1.0, 1.0, 1.0 }, 4.0, 1);
-		particleG1->addForceGenerator(gravityForceGenerator);
-		particleG2 = new Particle(Vector3(10.0, 50.0, 0.0), Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 0.0), 0.98, { 1.0, 1.0, 0.0, 1.0 }, 4.0, 4);
-		particleG2->addForceGenerator(gravityForceGenerator);
+		// Gravedad normal
+		// Masa 1
+		Particle* p = new Particle(Vector3(-10.0, 50.0, 10.0), Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 0.0), 0.98, { 0.2, 1.0, 1.0, 1.0 }, 4.0, 1);
+		p->addForceGenerator(gravityForceGenerator);
+		particulas.push_back(p);
+		// Masa 4
+		Particle* p2 = new Particle(Vector3(10.0, 50.0, -10.0), Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 0.0), 0.98, { 1.0, 1.0, 0.0, 1.0 }, 4.0, 4);
+		p2->addForceGenerator(gravityForceGenerator);
+		particulas.push_back(p2);
+
+		// Gravedad al reves
+		// Masa 1
+		Particle* p3 = new Particle(Vector3(-10.0, 60.0, 10.0), Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 0.0), 0.98, { 0.2, 1.0, 1.0, 1.0 }, 4.0, 1);
+		p3->addForceGenerator(gravityForceGenerator2);
+		particulas.push_back(p3);
+		// Masa 4
+		Particle* p4 = new Particle(Vector3(10.0, 60.0, -10.0), Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 0.0), 0.98, { 1.0, 1.0, 0.0, 1.0 }, 4.0, 4);
+		p4->addForceGenerator(gravityForceGenerator2);
+		particulas.push_back(p4);
 		break;
 	}
 	case 'M':
@@ -201,9 +237,12 @@ Game::~Game()
 {
 	deleteAll();
 
-	// Borra Generador de Gravedad
-	delete gravityForceGenerator;
-	gravityForceGenerator = nullptr;
+	// Borra Generadores de Gravedad
+	if (gravityForceGenerator != nullptr)
+		gravityForceGenerator = nullptr;
+	if (gravityForceGenerator2 != nullptr)
+		gravityForceGenerator2 = nullptr;
+
 }
 
 void Game::deleteAll()
@@ -231,18 +270,22 @@ void Game::deleteAll()
 		it = projectiles.erase(it);
 	}
 
-	if (particle != nullptr) {
-		delete particle;
-		particle = nullptr;
+	for (std::list<Particle*>::iterator it = particulas.begin(); it != particulas.end();) {
+		delete (*it);
+		it = particulas.erase(it);
 	}
-	if (particleG1 != nullptr) {
-		delete particleG1;
-		particleG1 = nullptr;
-	}
-	if (particleG2 != nullptr) {
-		delete particleG2;
-		particleG2 = nullptr;
-	}
+	//if (particle != nullptr) {
+	//	delete particle;
+	//	particle = nullptr;
+	//}
+	//if (particleG1 != nullptr) {
+	//	delete particleG1;
+	//	particleG1 = nullptr;
+	//}
+	//if (particleG2 != nullptr) {
+	//	delete particleG2;
+	//	particleG2 = nullptr;
+	//}
 
 	for (std::list<ParticleSystem*>::iterator it = particleSystems.begin(); it != particleSystems.end();) {
 		delete (*it);

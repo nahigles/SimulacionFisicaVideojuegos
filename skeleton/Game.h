@@ -28,16 +28,19 @@ protected:
 	RenderItem* xRenderItem = NULL, * yRenderItem = NULL, * zRenderItem = NULL, * originRenderItem = NULL;
 	PxTransform x, y, z, origin;
 
-	Particle* particle = nullptr;
-	Particle* particleG1 = nullptr;
-	Particle* particleG2 = nullptr;
+	//Particle* particle = nullptr;
+	//Particle* particleG1 = nullptr;
+	//Particle* particleG2 = nullptr;
 
-	list<Projectile*> projectiles;
+	list<Particle*> particulas;
+
+	list<Projectile*> projectiles; // LISTA PROYECTILES
 
 	list<ParticleSystem*> particleSystems; // SISTEMA DE PARTICULAS
 
 	// Gravedad
 	GravityForceGenerator* gravityForceGenerator = nullptr;
+	GravityForceGenerator* gravityForceGenerator2 = nullptr;
 
 
 public:

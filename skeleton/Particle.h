@@ -18,8 +18,8 @@ public:
 	void addForceGenerator(ForceGenerator* force);
 	void addForce(Vector3 f);
 	inline double getMass() const { return masa; }
-	inline double getInverseMass() const { return 1.0/masa; }
-	inline void clearForces(){ forceAcum = Vector3(0, 0, 0); }
+	inline double getInverseMass() const { if (masa)return (1.0 / masa); else return 0.0; }
+	inline void clearForces() { forceAcum = Vector3(0, 0, 0); }
 
 protected:
 	Vector3 vel;
