@@ -128,30 +128,30 @@ void Game::keyPressed(unsigned char key)
 	case 'U':
 	{
 		// LANZADOR DE BOLAS
-		particleSystems.push_back(new ParticleSystem({ 0.0,10.0,0.0 }, { 0.0, 8.0, 0.0 }, { 0.0, -5.0, 0.0 }, 2, { 0.0, 1.0, 0.56, 1.0 }, 7.0, 0.5, 5, 15, BALLS));
+		particleSystems.push_back(new ParticleSystem({ 0.0,10.0,0.0 }, { 0.0, 8.0, 0.0 }, { 0.0, 5.0, 0.0 }, 2, { 0.0, 1.0, 0.56, 1.0 }, 7.0, 0.5, 5, 15, BALLS));
 		break;
 	}
 	case 'T': {
 		// LLUVIA
-		particleSystems.push_back(new ParticleSystem({ 0.0,50.0,0.0 }, { 0.0, -10.0, 0.0 }, { 0.0, -20.0, 0.0 }, 0.25, { 0.0, 0.56, 0.9, 0.3 }, 9.0, 0.05, 20, 5, RAIN));
+		particleSystems.push_back(new ParticleSystem({ 0.0,50.0,0.0 }, { 0.0, -10.0, 0.0 }, { 0.0, 20.0, 0.0 }, 0.25, { 0.0, 0.56, 0.9, 0.3 }, 9.0, 0.05, 20, 5, RAIN));
 
 		break;
 	}
 	case 'E': {
 		// NIEVE
-		particleSystems.push_back(new ParticleSystem({ 0.0,50.0,0.0 }, { 0.0, -10.0, 0.0 }, { 0.0, -0.5, 0.0 }, 0.5, { 1.0, 1.0, 1.0, 0.0 }, 9.0, 0.05, 20, 5, SNOW));
+		particleSystems.push_back(new ParticleSystem({ 0.0,50.0,0.0 }, { 0.0, -10.0, 0.0 }, { 0.0, 0.5, 0.0 }, 0.5, { 1.0, 1.0, 1.0, 0.0 }, 9.0, 0.05, 20, 5, SNOW));
 		break;
 	}
 	case 'R':
 	{
 		// ESPUMA
-		particleSystems.push_back(new ParticleSystem({ 0.0,50.0,0.0 }, { 10.0, 10.0, 0.0 }, { 0.0, -10.0, 0.0 }, 4, { 1.0, 1.0, 1.0, 1.0 }, 9.0, 0.05, 5, 15, FOAM));
+		particleSystems.push_back(new ParticleSystem({ 0.0,50.0,0.0 }, { 10.0, 10.0, 0.0 }, { 0.0, 10.0, 0.0 }, 4, { 1.0, 1.0, 1.0, 1.0 }, 9.0, 0.05, 5, 15, FOAM));
 		break;
 	}
 	case 'Y':
 	{
 		// BOLAS COLORIDAS
-		particleSystems.push_back(new ParticleSystem({ 0.0,50.0,0.0 }, { 10.0, 10.0, 0.0 }, { 0.0, 0.0, 0.0 }/*{ 0.0, -10.0, 0.0 }*/, 3, { 1.0, 1.0, 1.0, 1.0 }, 9.0, 0.05, 5, 15, COLOURFULL));
+		particleSystems.push_back(new ParticleSystem({ 0.0,50.0,0.0 }, { 10.0, 10.0, 0.0 }, { 0.0, 10.0, 0.0 }, 3, { 1.0, 1.0, 1.0, 1.0 }, 9.0, 0.05, 5, 15, COLOURFULL));
 		break;
 	}
 	// GRAVITY TESTER
