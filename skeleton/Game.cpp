@@ -178,6 +178,12 @@ void Game::keyPressed(unsigned char key)
 		particulas.push_back(p4);
 		break;
 	}
+	// Invierte gravedad
+	case 'F':
+	{
+		gravityForceGenerator2->changeGravity(-gravityForceGenerator2->getGravity());
+		break;
+	}
 	case 'M':
 	{
 		deleteAll();

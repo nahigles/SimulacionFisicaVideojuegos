@@ -80,8 +80,7 @@ void ParticleSystem::createParticle()
 
 	double masaParticula = 3;
 	Particle* p = new Particle(posRandom, randomVel, initialAcel, 0.98, initialColor, initialSize, masaParticula);
-	GravityForceGenerator* gGenerator = new GravityForceGenerator(17.0f); // TENGO Q HACER DELETE EN ALGUN MOMENTO
-	p->addForceGenerator(gGenerator);
+	p->addForceGenerator(gravityGenerator);
 	particles.push_back(p);
 	nParticles++;
 }
@@ -105,6 +104,8 @@ ParticleSystem::ParticleSystem(Vector3 pos, Vector3 vel, Vector3 acel, float siz
 	indexColor = 0;
 	maxNumParticle = maxParticles;
 	nParticles = 0;
+
+	gravityGenerator = new GravityForceGenerator(acel.y); // TENGO Q HACER DELETE EN ALGUN MOMENTO
 }
 
 ParticleSystem::~ParticleSystem()
@@ -112,6 +113,9 @@ ParticleSystem::~ParticleSystem()
 	for (std::list<Particle*>::iterator it = particles.begin(); it != particles.end(); ++it)
 		delete (*it);
 	particles.clear();
+
+	delete gravityGenerator;
+	gravityGenerator = nullptr;
 }
 
 void ParticleSystem::update(double t)

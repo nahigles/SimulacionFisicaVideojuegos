@@ -44,6 +44,8 @@ protected:
 	// Lista para guardar particulas
 	std::list<Particle*> particles;
 
+	// Gravedad
+	GravityForceGenerator* gravityGenerator = nullptr;
 
 	// Variables auxiliares
 	double timeCont; // Contador del tiempo que ha pasado
