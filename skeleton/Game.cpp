@@ -157,7 +157,9 @@ void Game::keyPressed(unsigned char key)
 		Vector3 cDir = cam->getDir();
 
 		float speed = 25.0f;
-		projectiles.push_back(new Projectile(cPos, cDir * speed, Vector3(0.0, -4.5, 0.0), 0.98, { 1.0, 1.0, 0.0, 1.0 }, 2, 1.0f));
+		Projectile* p = new Projectile(cPos, cDir * speed, Vector3(0.0, -4.5, 0.0), 0.98, { 1.0, 1.0, 0.0, 1.0 }, 2, 1.0f);
+		p->addForceGenerator(gravityForceGenerator);
+		projectiles.push_back(p);
 		break;
 	}
 	case 'I':
@@ -168,7 +170,9 @@ void Game::keyPressed(unsigned char key)
 		Vector3 cDir = cam->getDir();
 
 		float speed = 50.0f;
-		projectiles.push_back(new Projectile(cPos, cDir * speed, Vector3(0.0, -4.5, 0.0), 0.98, { 0.0, 1.0, 1.0, 1.0 }, 3, 1.0f));
+		Projectile* p = new Projectile(cPos, cDir * speed, Vector3(0.0, -4.5, 0.0), 0.98, { 0.0, 1.0, 1.0, 1.0 }, 3, 1.0f);
+		p->addForceGenerator(gravityForceGenerator);
+		projectiles.push_back(p);
 		break;
 	}
 	case 'O':
@@ -179,7 +183,9 @@ void Game::keyPressed(unsigned char key)
 		Vector3 cDir = cam->getDir();
 
 		float speed = 7.0f;
-		projectiles.push_back(new Projectile(cPos, cDir * speed, Vector3(0.0, -1.5, 0.0), 0.98, { 1.0, 1.0, 1.0, 1.0 }, 3, 1.0f));
+		Projectile* p = new Projectile(cPos, cDir * speed, Vector3(0.0, -1.5, 0.0), 0.98, { 1.0, 1.0, 1.0, 1.0 }, 3, 1.0f);
+		p->addForceGenerator(gravityForceGenerator);
+		projectiles.push_back(p);
 		break;
 	}
 	case ' ':
