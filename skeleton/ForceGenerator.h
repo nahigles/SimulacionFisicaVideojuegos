@@ -1,6 +1,9 @@
 #pragma once
 #include "core.hpp"
 #include "Particle.h"
+//#include "Bounding.h"
+#include "BoundingBox.h"
+#include "BoundingSphere.h"
 
 enum Force
 {
@@ -14,6 +17,8 @@ class ForceGenerator
 {
 protected:
 	Vector3 force;
+	Shape shape;
+	Bounding* boundingShape = nullptr;
 
 public:
 	ForceGenerator();

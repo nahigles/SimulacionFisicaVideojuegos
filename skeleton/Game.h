@@ -41,6 +41,7 @@ protected:
 	// Gravedad
 	GravityForceGenerator* gravityForceGenerator = nullptr;
 	GravityForceGenerator* gravityForceGenerator2 = nullptr;
+	GravityForceGenerator* gravityForceGenerator3 = nullptr;
 
 
 public:

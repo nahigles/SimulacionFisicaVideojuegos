@@ -20,6 +20,7 @@ public:
 	inline double getMass() const { return masa; }
 	inline double getInverseMass() const { if (masa)return (1.0 / masa); else return 0.0; }
 	inline void clearForces() { forceAcum = Vector3(0, 0, 0); }
+	inline Vector3 getPos() { return pose.p; }
 
 protected:
 	Vector3 vel;

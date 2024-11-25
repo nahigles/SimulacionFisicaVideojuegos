@@ -5,8 +5,6 @@ Game::Game()
 {
 	_state = START;
 	_nextState = START;
-	gravityForceGenerator = new GravityForceGenerator(10.0f); // Pongo gravedad
-	gravityForceGenerator2 = new GravityForceGenerator(-10.0f); // Pongo gravedad
 }
 
 void Game::nextState()
@@ -21,11 +19,22 @@ void Game::update(double t)
 
 		switch (_state)
 		{
-		case START:
-			gravityForceGenerator = new GravityForceGenerator(10.0f); // Pongo gravedad
-			gravityForceGenerator2 = new GravityForceGenerator(-10.0f); // Pongo gravedad
+		case START: {
+
 			break;
+		}
 		case GAME: {
+			// Gravedad
+			gravityForceGenerator = new GravityForceGenerator(10.0f); 
+			gravityForceGenerator2 = new GravityForceGenerator(-10.0f); 
+
+			// Box shape
+			//gravityForceGenerator3 = new GravityForceGenerator(15.0f, { -20.0f, 10.0f, -20.0f }, { -15.0f, 60.0f, 20.0f });
+			
+			// Sphere shape
+			gravityForceGenerator3 = new GravityForceGenerator(15.0f, { 0.0f, 60.0f, 0.0f }, {0.0f, 0.0f, 0.0f }, 30);
+
+
 			// Practica 0
 			Vector3D originVector = Vector3D();
 			Vector3D xVector = Vector3D(10, 0, 0);
@@ -44,7 +53,7 @@ void Game::update(double t)
 
 
 			// Practica 1.1 [PARTICULAS]
-			particulas.push_back( new Particle(Vector3(0.0, 0.0, 0.0), Vector3(1.0, 0.0, 0.0), Vector3(1.0, 0.0, 0.0), 0.98, { 1.0, 0.0, 1.0, 1.0 }, 1.0, 3));
+			particulas.push_back(new Particle(Vector3(0.0, 0.0, 0.0), Vector3(1.0, 0.0, 0.0), Vector3(1.0, 0.0, 0.0), 0.98, { 1.0, 0.0, 1.0, 1.0 }, 1.0, 3));
 			break;
 		}
 		case END:
@@ -182,6 +191,19 @@ void Game::keyPressed(unsigned char key)
 	case 'F':
 	{
 		gravityForceGenerator2->changeGravity(-gravityForceGenerator2->getGravity());
+		break;
+	}
+	case 'H':
+	{
+		// Coloco muchas particulas y pongo un bounding box pequeño para ver que funciona
+		int m = 1;
+		for (int i = -50; i < 50; i += 10) {
+			Particle* p = new Particle(Vector3(i, 60.0, -i), Vector3(10.0, 0.0, -10.0), Vector3(0.0, 0.0, 0.0), 0.98, { 1.0, 1.0, 0.0, 1.0 }, 2.0, m);
+			p->addForceGenerator(gravityForceGenerator3);
+			particulas.push_back(p);
+			m++;
+		}
+
 		break;
 	}
 	case 'M':

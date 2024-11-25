@@ -253,6 +253,9 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bounding.cpp" />
+    <ClCompile Include="BoundingBox.cpp" />
+    <ClCompile Include="BoundingSphere.cpp" />
     <ClCompile Include="callbacks.cpp" />
     <ClCompile Include="ForceGenerator.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -267,6 +270,9 @@
     <ClCompile Include="Vector3D.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bounding.h" />
+    <ClInclude Include="BoundingBox.h" />
+    <ClInclude Include="BoundingSphere.h" />
     <ClInclude Include="callbacks.hpp" />
     <ClInclude Include="core.hpp" />
     <ClInclude Include="ForceGenerator.h" />
