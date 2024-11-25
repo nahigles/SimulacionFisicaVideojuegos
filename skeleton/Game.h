@@ -14,6 +14,7 @@ enum State
 {
 	START = 0,
 	GAME,
+	FORCES,
 	END,
 	LAST_STATE
 
@@ -53,5 +54,6 @@ public:
 
 protected:
 	void deleteAll();
+	void deleteForces();
 };
 

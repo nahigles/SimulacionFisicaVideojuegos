@@ -5,6 +5,10 @@ Game::Game()
 {
 	_state = START;
 	_nextState = START;
+
+	// Gravedad
+	gravityForceGenerator = new GravityForceGenerator(10.0f);
+	gravityForceGenerator2 = new GravityForceGenerator(-10.0f);
 }
 
 void Game::nextState()
@@ -20,20 +24,15 @@ void Game::update(double t)
 		switch (_state)
 		{
 		case START: {
+			std::cout << "Start State" << endl;
 
+			// Gravedad
+			gravityForceGenerator = new GravityForceGenerator(10.0f);
+			gravityForceGenerator2 = new GravityForceGenerator(-10.0f);
 			break;
 		}
 		case GAME: {
-			// Gravedad
-			gravityForceGenerator = new GravityForceGenerator(10.0f); 
-			gravityForceGenerator2 = new GravityForceGenerator(-10.0f); 
-
-			// Box shape
-			//gravityForceGenerator3 = new GravityForceGenerator(15.0f, { -20.0f, 10.0f, -20.0f }, { -15.0f, 60.0f, 20.0f });
-			
-			// Sphere shape
-			gravityForceGenerator3 = new GravityForceGenerator(15.0f, { 0.0f, 60.0f, 0.0f }, {0.0f, 0.0f, 0.0f }, 30);
-
+			std::cout << "Game State" << endl;
 
 			// Practica 0
 			Vector3D originVector = Vector3D();
@@ -56,16 +55,25 @@ void Game::update(double t)
 			particulas.push_back(new Particle(Vector3(0.0, 0.0, 0.0), Vector3(1.0, 0.0, 0.0), Vector3(1.0, 0.0, 0.0), 0.98, { 1.0, 0.0, 1.0, 1.0 }, 1.0, 3));
 			break;
 		}
-		case END:
-			deleteAll();
+		case FORCES: {
+			std::cout << "Forces State" << endl;
+			// Gravedad con
+			// Box shape
+			//gravityForceGenerator3 = new GravityForceGenerator(15.0f, { -20.0f, 10.0f, -20.0f }, { -15.0f, 60.0f, 20.0f });
 
-			// Borra Generadores de Gravedad
-			if (gravityForceGenerator != nullptr)
-				gravityForceGenerator = nullptr;
-			if (gravityForceGenerator2 != nullptr)
-				gravityForceGenerator2 = nullptr;
+			// Sphere shape
+			gravityForceGenerator3 = new GravityForceGenerator(15.0f, { 0.0f, 60.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, 30);
 
 			break;
+		}
+		case END: {
+
+			std::cout << "End State" << endl;
+			deleteAll();
+			deleteForces();
+
+			break;
+		}
 		case LAST_STATE:
 			break;
 		default:
@@ -77,15 +85,9 @@ void Game::update(double t)
 	{
 	case START:
 		break;
-	case GAME: {
 
-		// Actualizo particula
-		//if (particle != nullptr)
-		//	particle->update(t);
-		//if (particleG1 != nullptr)
-		//	particleG1->update(t);
-		//if (particleG2 != nullptr)
-		//	particleG2->update(t);
+	case FORCES:
+	case GAME: {
 
 		std::list<Particle*>::iterator itP = particulas.begin();
 		while (itP != particulas.end()) {
@@ -121,8 +123,10 @@ void Game::update(double t)
 
 		break;
 	}
-	case END:
+	case END: {
+
 		break;
+	}
 	case LAST_STATE:
 		break;
 	default:
@@ -136,74 +140,84 @@ void Game::keyPressed(unsigned char key)
 	{
 	case 'U':
 	{
-		// LANZADOR DE BOLAS
-		particleSystems.push_back(new ParticleSystem({ 0.0,10.0,0.0 }, { 0.0, 8.0, 0.0 }, { 0.0, 5.0, 0.0 }, 2, { 0.0, 1.0, 0.56, 1.0 }, 7.0, 0.5, 5, 15, BALLS));
+		if (_state == GAME)
+			// LANZADOR DE BOLAS
+			particleSystems.push_back(new ParticleSystem({ 0.0,10.0,0.0 }, { 0.0, 8.0, 0.0 }, { 0.0, 5.0, 0.0 }, 2, { 0.0, 1.0, 0.56, 1.0 }, 7.0, 0.5, 5, 15, BALLS));
 		break;
 	}
 	case 'T': {
-		// LLUVIA
-		particleSystems.push_back(new ParticleSystem({ 0.0,50.0,0.0 }, { 0.0, -10.0, 0.0 }, { 0.0, 20.0, 0.0 }, 0.25, { 0.0, 0.56, 0.9, 0.3 }, 9.0, 0.05, 20, 5, RAIN));
+		if (_state == GAME)
+			// LLUVIA
+			particleSystems.push_back(new ParticleSystem({ 0.0,50.0,0.0 }, { 0.0, -10.0, 0.0 }, { 0.0, 20.0, 0.0 }, 0.25, { 0.0, 0.56, 0.9, 0.3 }, 9.0, 0.05, 20, 5, RAIN));
 
 		break;
 	}
 	case 'E': {
-		// NIEVE
-		particleSystems.push_back(new ParticleSystem({ 0.0,50.0,0.0 }, { 0.0, -10.0, 0.0 }, { 0.0, 0.5, 0.0 }, 0.5, { 1.0, 1.0, 1.0, 0.0 }, 9.0, 0.05, 20, 5, SNOW));
+		if (_state == GAME)
+			// NIEVE
+			particleSystems.push_back(new ParticleSystem({ 0.0,50.0,0.0 }, { 0.0, -10.0, 0.0 }, { 0.0, 0.5, 0.0 }, 0.5, { 1.0, 1.0, 1.0, 0.0 }, 9.0, 0.05, 20, 5, SNOW));
 		break;
 	}
 	case 'R':
 	{
-		// ESPUMA
-		particleSystems.push_back(new ParticleSystem({ 0.0,50.0,0.0 }, { 10.0, 10.0, 0.0 }, { 0.0, 10.0, 0.0 }, 4, { 1.0, 1.0, 1.0, 1.0 }, 9.0, 0.05, 5, 15, FOAM));
+		if (_state == GAME)
+			// ESPUMA
+			particleSystems.push_back(new ParticleSystem({ 0.0,50.0,0.0 }, { 10.0, 10.0, 0.0 }, { 0.0, 10.0, 0.0 }, 4, { 1.0, 1.0, 1.0, 1.0 }, 9.0, 0.05, 5, 15, FOAM));
 		break;
 	}
 	case 'Y':
 	{
-		// BOLAS COLORIDAS
-		particleSystems.push_back(new ParticleSystem({ 0.0,50.0,0.0 }, { 10.0, 10.0, 0.0 }, { 0.0, 10.0, 0.0 }, 3, { 1.0, 1.0, 1.0, 1.0 }, 9.0, 0.05, 5, 15, COLOURFULL));
+		if (_state == GAME)
+			// BOLAS COLORIDAS
+			particleSystems.push_back(new ParticleSystem({ 0.0,50.0,0.0 }, { 10.0, 10.0, 0.0 }, { 0.0, 10.0, 0.0 }, 3, { 1.0, 1.0, 1.0, 1.0 }, 9.0, 0.05, 5, 15, COLOURFULL));
 		break;
 	}
 	// GRAVITY TESTER
 	case 'G':
 	{
-		// Gravedad normal
-		// Masa 1
-		Particle* p = new Particle(Vector3(-10.0, 50.0, 10.0), Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 0.0), 0.98, { 0.2, 1.0, 1.0, 1.0 }, 4.0, 1);
-		p->addForceGenerator(gravityForceGenerator);
-		particulas.push_back(p);
-		// Masa 4
-		Particle* p2 = new Particle(Vector3(10.0, 50.0, -10.0), Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 0.0), 0.98, { 1.0, 1.0, 0.0, 1.0 }, 4.0, 4);
-		p2->addForceGenerator(gravityForceGenerator);
-		particulas.push_back(p2);
+		if (_state == FORCES) {
 
-		// Gravedad al reves
-		// Masa 1
-		Particle* p3 = new Particle(Vector3(-10.0, 60.0, 10.0), Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 0.0), 0.98, { 0.2, 1.0, 1.0, 1.0 }, 4.0, 1);
-		p3->addForceGenerator(gravityForceGenerator2);
-		particulas.push_back(p3);
-		// Masa 4
-		Particle* p4 = new Particle(Vector3(10.0, 60.0, -10.0), Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 0.0), 0.98, { 1.0, 1.0, 0.0, 1.0 }, 4.0, 4);
-		p4->addForceGenerator(gravityForceGenerator2);
-		particulas.push_back(p4);
+			// Gravedad normal
+			// Masa 1
+			Particle* p = new Particle(Vector3(-10.0, 50.0, 10.0), Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 0.0), 0.98, { 0.2, 1.0, 1.0, 1.0 }, 4.0, 1);
+			p->addForceGenerator(gravityForceGenerator);
+			particulas.push_back(p);
+			// Masa 4
+			Particle* p2 = new Particle(Vector3(10.0, 50.0, -10.0), Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 0.0), 0.98, { 1.0, 1.0, 0.0, 1.0 }, 4.0, 4);
+			p2->addForceGenerator(gravityForceGenerator);
+			particulas.push_back(p2);
+
+			// Gravedad al reves
+			// Masa 1
+			Particle* p3 = new Particle(Vector3(-10.0, 60.0, 10.0), Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 0.0), 0.98, { 0.2, 1.0, 1.0, 1.0 }, 4.0, 1);
+			p3->addForceGenerator(gravityForceGenerator2);
+			particulas.push_back(p3);
+			// Masa 4
+			Particle* p4 = new Particle(Vector3(10.0, 60.0, -10.0), Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 0.0), 0.98, { 1.0, 1.0, 0.0, 1.0 }, 4.0, 4);
+			p4->addForceGenerator(gravityForceGenerator2);
+			particulas.push_back(p4);
+		}
 		break;
 	}
 	// Invierte gravedad
 	case 'F':
 	{
-		gravityForceGenerator2->changeGravity(-gravityForceGenerator2->getGravity());
+		if (_state == FORCES)
+			gravityForceGenerator2->changeGravity(-gravityForceGenerator2->getGravity());
 		break;
 	}
 	case 'H':
 	{
-		// Coloco muchas particulas y pongo un bounding box pequeño para ver que funciona
-		int m = 1;
-		for (int i = -50; i < 50; i += 10) {
-			Particle* p = new Particle(Vector3(i, 60.0, -i), Vector3(10.0, 0.0, -10.0), Vector3(0.0, 0.0, 0.0), 0.98, { 1.0, 1.0, 0.0, 1.0 }, 2.0, m);
-			p->addForceGenerator(gravityForceGenerator3);
-			particulas.push_back(p);
-			m++;
+		if (_state == FORCES) {
+			// Coloco muchas particulas y pongo un bounding box pequeño para ver que funciona
+			int m = 1;
+			for (int i = -50; i < 50; i += 10) {
+				Particle* p = new Particle(Vector3(i, 60.0, -i), Vector3(10.0, 0.0, -10.0), Vector3(0.0, 0.0, 0.0), 0.98, { 1.0, 1.0, 0.0, 1.0 }, 2.0, m);
+				p->addForceGenerator(gravityForceGenerator3);
+				particulas.push_back(p);
+				m++;
+			}
 		}
-
 		break;
 	}
 	case 'M':
@@ -213,43 +227,48 @@ void Game::keyPressed(unsigned char key)
 	}
 	case 'P':
 	{
+		if (_state == GAME) {
+			// Practica 1.2 [PROYECTILES]
+			// Bola
+			Camera* cam = GetCamera();
+			Vector3 cPos = cam->getEye();
+			Vector3 cDir = cam->getDir();
 
-		// Practica 1.2 [PROYECTILES]
-		// Bola
-		Camera* cam = GetCamera();
-		Vector3 cPos = cam->getEye();
-		Vector3 cDir = cam->getDir();
-
-		float speed = 25.0f;
-		Projectile* p = new Projectile(cPos, cDir * speed, Vector3(0.0, -4.5, 0.0), 0.98, { 1.0, 1.0, 0.0, 1.0 }, 2, 1.0f);
-		p->addForceGenerator(gravityForceGenerator);
-		projectiles.push_back(p);
+			float speed = 25.0f;
+			Projectile* p = new Projectile(cPos, cDir * speed, Vector3(0.0, -4.5, 0.0), 0.98, { 1.0, 1.0, 0.0, 1.0 }, 2, 1.0f);
+			p->addForceGenerator(gravityForceGenerator);
+			projectiles.push_back(p);
+		}
 		break;
 	}
 	case 'I':
 	{
-		// Bala
-		Camera* cam = GetCamera();
-		Vector3 cPos = cam->getEye();
-		Vector3 cDir = cam->getDir();
+		if (_state == GAME) {
+			// Bala
+			Camera* cam = GetCamera();
+			Vector3 cPos = cam->getEye();
+			Vector3 cDir = cam->getDir();
 
-		float speed = 50.0f;
-		Projectile* p = new Projectile(cPos, cDir * speed, Vector3(0.0, -4.5, 0.0), 0.98, { 0.0, 1.0, 1.0, 1.0 }, 3, 1.0f);
-		p->addForceGenerator(gravityForceGenerator);
-		projectiles.push_back(p);
+			float speed = 50.0f;
+			Projectile* p = new Projectile(cPos, cDir * speed, Vector3(0.0, -4.5, 0.0), 0.98, { 0.0, 1.0, 1.0, 1.0 }, 3, 1.0f);
+			p->addForceGenerator(gravityForceGenerator);
+			projectiles.push_back(p);
+		}
 		break;
 	}
 	case 'O':
 	{
-		// Nieve
-		Camera* cam = GetCamera();
-		Vector3 cPos = cam->getEye();
-		Vector3 cDir = cam->getDir();
+		if (_state == GAME) {
+			// Nieve
+			Camera* cam = GetCamera();
+			Vector3 cPos = cam->getEye();
+			Vector3 cDir = cam->getDir();
 
-		float speed = 7.0f;
-		Projectile* p = new Projectile(cPos, cDir * speed, Vector3(0.0, -1.5, 0.0), 0.98, { 1.0, 1.0, 1.0, 1.0 }, 3, 1.0f);
-		p->addForceGenerator(gravityForceGenerator);
-		projectiles.push_back(p);
+			float speed = 7.0f;
+			Projectile* p = new Projectile(cPos, cDir * speed, Vector3(0.0, -1.5, 0.0), 0.98, { 1.0, 1.0, 1.0, 1.0 }, 3, 1.0f);
+			p->addForceGenerator(gravityForceGenerator);
+			projectiles.push_back(p);
+		}
 		break;
 	}
 	case ' ':
@@ -264,13 +283,7 @@ void Game::keyPressed(unsigned char key)
 Game::~Game()
 {
 	deleteAll();
-
-	// Borra Generadores de Gravedad
-	if (gravityForceGenerator != nullptr)
-		gravityForceGenerator = nullptr;
-	if (gravityForceGenerator2 != nullptr)
-		gravityForceGenerator2 = nullptr;
-
+	deleteForces();
 }
 
 void Game::deleteAll()
@@ -302,24 +315,26 @@ void Game::deleteAll()
 		delete (*it);
 		it = particulas.erase(it);
 	}
-	//if (particle != nullptr) {
-	//	delete particle;
-	//	particle = nullptr;
-	//}
-	//if (particleG1 != nullptr) {
-	//	delete particleG1;
-	//	particleG1 = nullptr;
-	//}
-	//if (particleG2 != nullptr) {
-	//	delete particleG2;
-	//	particleG2 = nullptr;
-	//}
 
 	for (std::list<ParticleSystem*>::iterator it = particleSystems.begin(); it != particleSystems.end();) {
 		delete (*it);
 		it = particleSystems.erase(it);
 	}
+}
 
-
-
+void Game::deleteForces()
+{
+	// Borra Generadores de Gravedad
+	if (gravityForceGenerator != nullptr) {
+		delete gravityForceGenerator;
+		gravityForceGenerator = nullptr;
+	}
+	if (gravityForceGenerator2 != nullptr) {
+		delete gravityForceGenerator2;
+		gravityForceGenerator2 = nullptr;
+	}
+	if (gravityForceGenerator3 != nullptr) {
+		delete gravityForceGenerator3;
+		gravityForceGenerator3 = nullptr;
+	}
 }

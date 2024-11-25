@@ -10,7 +10,12 @@ class Bounding
 public:
 	Bounding() {};
 	virtual bool isInside(Vector3 point) = 0;
-	virtual ~Bounding() {};
+	~Bounding() {
+		if (shapeItemRender != nullptr) {
+			DeregisterRenderItem(shapeItemRender);
+			shapeItemRender = nullptr;
+		}
+	};
 
 protected:
 	RenderItem* shapeItemRender;
