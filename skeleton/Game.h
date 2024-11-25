@@ -6,6 +6,7 @@
 #include <list>
 #include <iostream>
 #include "GravityForceGenerator.h"
+#include "WindForceGenerator.h"
 
 using namespace physx;
 using namespace std;
@@ -44,6 +45,7 @@ protected:
 	GravityForceGenerator* gravityForceGenerator2 = nullptr;
 	GravityForceGenerator* gravityForceGenerator3 = nullptr;
 
+	WindForceGenerator* windForceGenerator = nullptr;
 
 public:
 	Game();

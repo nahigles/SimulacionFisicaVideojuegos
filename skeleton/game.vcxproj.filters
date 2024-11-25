@@ -20,6 +20,7 @@
     <ClCompile Include="Bounding.cpp" />
     <ClCompile Include="BoundingBox.cpp" />
     <ClCompile Include="BoundingSphere.cpp" />
+    <ClCompile Include="WindForceGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -41,6 +42,7 @@
     <ClInclude Include="Bounding.h" />
     <ClInclude Include="BoundingBox.h" />
     <ClInclude Include="BoundingSphere.h" />
+    <ClInclude Include="WindForceGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

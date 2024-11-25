@@ -5,23 +5,16 @@
 #include "BoundingBox.h"
 #include "BoundingSphere.h"
 
-enum Force
-{
-	GRAVITY,
-	TORNADO,
-	BLAST,
-	LAST_FORCE
-};
-
 class ForceGenerator
 {
 protected:
 	Vector3 force;
-	Shape shape;
 	Bounding* boundingShape = nullptr;
+	bool usingBounding;
 
 public:
-	ForceGenerator();
+	ForceGenerator(Vector3 p1 = { 0.0f,0.0f,0.0f }, Vector3 p2 = { 0.0f,0.0f,0.0f }, float r = 0);
 	virtual void update(Particle* p) = 0;
+	~ForceGenerator();
 };
 

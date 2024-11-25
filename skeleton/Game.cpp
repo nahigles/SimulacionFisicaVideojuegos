@@ -63,6 +63,7 @@ void Game::update(double t)
 
 			// Sphere shape
 			gravityForceGenerator3 = new GravityForceGenerator(15.0f, { 0.0f, 60.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, 30);
+			windForceGenerator = new WindForceGenerator({ 0.0f, 60.0f, 0.0f }, 0.99, 0, { 60.0f, 60.0f, -60.0f }, { 0.0f, 0.0f, 0.0f }, 10);
 
 			break;
 		}
@@ -220,6 +221,14 @@ void Game::keyPressed(unsigned char key)
 		}
 		break;
 	}
+	case 'V':
+	{
+		if (_state == FORCES) {
+			// Vientoooo
+
+		}
+		break;
+	}
 	case 'M':
 	{
 		deleteAll();
@@ -336,5 +345,10 @@ void Game::deleteForces()
 	if (gravityForceGenerator3 != nullptr) {
 		delete gravityForceGenerator3;
 		gravityForceGenerator3 = nullptr;
+	}
+
+	if (windForceGenerator != nullptr) {
+		delete windForceGenerator;
+		windForceGenerator = nullptr;
 	}
 }
