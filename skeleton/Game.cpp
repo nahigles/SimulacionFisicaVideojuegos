@@ -63,7 +63,7 @@ void Game::update(double t)
 
 			// Sphere shape
 			gravityForceGenerator3 = new GravityForceGenerator(15.0f, { 0.0f, 60.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, 30);
-			windForceGenerator = new WindForceGenerator({ 0.0f, 60.0f, 0.0f }, 0.99, 0, { 60.0f, 60.0f, -60.0f }, { 0.0f, 0.0f, 0.0f }, 10);
+			windForceGenerator = new WindForceGenerator({ 0.0f, 60.0f, 0.0f }, 0.99, 0, { 5.0f, 30.0f, 5.0f }, { 0.0f, 0.0f, 0.0f }, 30);
 
 			break;
 		}
@@ -141,36 +141,53 @@ void Game::keyPressed(unsigned char key)
 	{
 	case 'U':
 	{
-		if (_state == GAME)
+		if (_state == GAME) {
+
 			// LANZADOR DE BOLAS
-			particleSystems.push_back(new ParticleSystem({ 0.0,10.0,0.0 }, { 0.0, 8.0, 0.0 }, { 0.0, 5.0, 0.0 }, 2, { 0.0, 1.0, 0.56, 1.0 }, 7.0, 0.5, 5, 15, BALLS));
+			ParticleSystem* pSystem = new ParticleSystem({ 0.0,10.0,0.0 }, { 0.0, 8.0, 0.0 }, { 0.0, 5.0, 0.0 }, 2, { 0.0, 1.0, 0.56, 1.0 }, 7.0, 0.5, 5, 15, BALLS);
+			particleSystems.push_back(pSystem);
+			pSystem->addForceGenerator(gravityForceGenerator);
+		}
 		break;
 	}
 	case 'T': {
-		if (_state == GAME)
+		if (_state == GAME) {
+
 			// LLUVIA
-			particleSystems.push_back(new ParticleSystem({ 0.0,50.0,0.0 }, { 0.0, -10.0, 0.0 }, { 0.0, 20.0, 0.0 }, 0.25, { 0.0, 0.56, 0.9, 0.3 }, 9.0, 0.05, 20, 5, RAIN));
+			ParticleSystem* pSystem = new ParticleSystem({ 0.0,50.0,0.0 }, { 0.0, -10.0, 0.0 }, { 0.0, 20.0, 0.0 }, 0.25, { 0.0, 0.56, 0.9, 0.3 }, 9.0, 0.05, 20, 5, RAIN);
+			particleSystems.push_back(pSystem);
+			pSystem->addForceGenerator(gravityForceGenerator);
+		}
 
 		break;
 	}
 	case 'E': {
-		if (_state == GAME)
+		if (_state == GAME) {
 			// NIEVE
-			particleSystems.push_back(new ParticleSystem({ 0.0,50.0,0.0 }, { 0.0, -10.0, 0.0 }, { 0.0, 0.5, 0.0 }, 0.5, { 1.0, 1.0, 1.0, 0.0 }, 9.0, 0.05, 20, 5, SNOW));
+			ParticleSystem* pSystem = new ParticleSystem({ 0.0,50.0,0.0 }, { 0.0, -10.0, 0.0 }, { 0.0, 0.5, 0.0 }, 0.5, { 1.0, 1.0, 1.0, 0.0 }, 9.0, 0.05, 20, 5, SNOW);
+			particleSystems.push_back(pSystem);
+			pSystem->addForceGenerator(gravityForceGenerator);
+		}
 		break;
 	}
 	case 'R':
 	{
-		if (_state == GAME)
+		if (_state == GAME) {
 			// ESPUMA
-			particleSystems.push_back(new ParticleSystem({ 0.0,50.0,0.0 }, { 10.0, 10.0, 0.0 }, { 0.0, 10.0, 0.0 }, 4, { 1.0, 1.0, 1.0, 1.0 }, 9.0, 0.05, 5, 15, FOAM));
+			ParticleSystem* pSystem = new ParticleSystem({ 0.0,50.0,0.0 }, { 10.0, 10.0, 0.0 }, { 0.0, 10.0, 0.0 }, 4, { 1.0, 1.0, 1.0, 1.0 }, 9.0, 0.05, 5, 15, FOAM);
+			particleSystems.push_back(pSystem);
+			pSystem->addForceGenerator(gravityForceGenerator);
+		}
 		break;
 	}
 	case 'Y':
 	{
-		if (_state == GAME)
+		if (_state == GAME) {
 			// BOLAS COLORIDAS
-			particleSystems.push_back(new ParticleSystem({ 0.0,50.0,0.0 }, { 10.0, 10.0, 0.0 }, { 0.0, 10.0, 0.0 }, 3, { 1.0, 1.0, 1.0, 1.0 }, 9.0, 0.05, 5, 15, COLOURFULL));
+			ParticleSystem* pSystem = new ParticleSystem({ 0.0,50.0,0.0 }, { 10.0, 10.0, 0.0 }, { 0.0, 10.0, 0.0 }, 3, { 1.0, 1.0, 1.0, 1.0 }, 9.0, 0.05, 5, 15, COLOURFULL);
+			particleSystems.push_back(pSystem);
+			pSystem->addForceGenerator(gravityForceGenerator);
+		}
 		break;
 	}
 	// GRAVITY TESTER
@@ -225,7 +242,9 @@ void Game::keyPressed(unsigned char key)
 	{
 		if (_state == FORCES) {
 			// Vientoooo
-
+			ParticleSystem* pSystem = new ParticleSystem({ 0,0,0 }, { 0,0,0 }, { 0,0,0 }, 3, { 0,0,0, 0 }, 10, 0.5, 10, 0, COLOURFULL);
+			particleSystems.push_back(pSystem);
+			pSystem->addForceGenerator(windForceGenerator);
 		}
 		break;
 	}

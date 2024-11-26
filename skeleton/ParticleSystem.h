@@ -47,6 +47,9 @@ protected:
 	// Gravedad
 	GravityForceGenerator* gravityGenerator = nullptr;
 
+	// ForceGenerators
+	std::list<ForceGenerator*> forceGenerators;
+
 	// Variables auxiliares
 	double timeCont; // Contador del tiempo que ha pasado
 
@@ -70,6 +73,7 @@ public:
 	ParticleSystem(Vector3 pos, Vector3 vel,Vector3 acel, float size, Vector4 color, double lifeTime, double timeBetween, double randomPos, double randomVel, ParticleType pType, int maxParticles = 3000);
 	~ParticleSystem();
 	void update(double t);
+	void addForceGenerator(ForceGenerator* fGenerator);
 
 };
 

@@ -70,7 +70,7 @@ void ParticleSystem::createParticle()
 		randomVel = randomVel + initialVel;
 		initialColor = colors.at(indexColor);
 		indexColor = (indexColor + 1) % colors.size();
-		
+
 		break;
 	}
 	default:
@@ -80,7 +80,9 @@ void ParticleSystem::createParticle()
 
 	double masaParticula = 3;
 	Particle* p = new Particle(posRandom, randomVel, initialAcel, 0.98, initialColor, initialSize, masaParticula);
-	p->addForceGenerator(gravityGenerator);
+	for (auto it = forceGenerators.begin(); it != forceGenerators.end(); ++it) {
+		p->addForceGenerator(*it);
+	}
 	particles.push_back(p);
 	nParticles++;
 }
@@ -90,7 +92,7 @@ ParticleSystem::ParticleSystem(Vector3 pos, Vector3 vel, Vector3 acel, float siz
 	initialpos = pos;
 	initialVel = vel;
 	//initialAcel = acel;
-	initialAcel = Vector3(0,0,0); // PARA PROBAR SI REALMENTE FUNCIONA BIEN
+	initialAcel = Vector3(0, 0, 0); // PARA PROBAR SI REALMENTE FUNCIONA BIEN
 	initialSize = size;
 	initialColor = color;
 	initialLifeTime = lifeTime;
@@ -105,7 +107,6 @@ ParticleSystem::ParticleSystem(Vector3 pos, Vector3 vel, Vector3 acel, float siz
 	maxNumParticle = maxParticles;
 	nParticles = 0;
 
-	gravityGenerator = new GravityForceGenerator(acel.y); // TENGO Q HACER DELETE EN ALGUN MOMENTO
 }
 
 ParticleSystem::~ParticleSystem()
@@ -114,8 +115,10 @@ ParticleSystem::~ParticleSystem()
 		delete (*it);
 	particles.clear();
 
-	delete gravityGenerator;
-	gravityGenerator = nullptr;
+	//for (std::list<ForceGenerator*>::iterator it2 = forceGenerators.begin(); it2 != forceGenerators.end(); ++it2)
+	//	delete (*it2);
+	forceGenerators.clear();
+
 }
 
 void ParticleSystem::update(double t)
@@ -142,4 +145,9 @@ void ParticleSystem::update(double t)
 	else
 		timeCont += t;
 
+}
+
+void ParticleSystem::addForceGenerator(ForceGenerator* fGenerator)
+{
+	forceGenerators.push_back(fGenerator);
 }
