@@ -7,7 +7,7 @@ protected:
 	float k;
 
 public:
-	TornadoForceGenerator(Vector3 vel, float k, float kTornado, Vector3 center, float r = 0, bool visible = true);
+	TornadoForceGenerator(float k, float kTornado, Vector3 center, float r = 0, bool visible = true);
 	void update(Particle* p) override;
 };
 

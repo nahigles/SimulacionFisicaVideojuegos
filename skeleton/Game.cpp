@@ -63,8 +63,8 @@ void Game::update(double t)
 
 			// Sphere shape
 			gravityForceGenerator3 = new GravityForceGenerator(15.0f, { 0.0f, 60.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, 30);
-			windForceGenerator = new WindForceGenerator({ 0.0f, 60.0f, 0.0f }, 0.99, 0, { 5.0f, 30.0f, 5.0f }, { 0.0f, 0.0f, 0.0f }, 30);
-			tornadoForceGenerator = new TornadoForceGenerator({ 0.0f, 0.0f, 0.0f }, 0.99, 50, { 5.0f, 30.0f, 5.0f }/*, 35*/);
+			windForceGenerator = new WindForceGenerator({ 0.0f, 60.0f, 0.0f }, 0.99/*, 0, { 5.0f, 30.0f, 5.0f }, { 0.0f, 0.0f, 0.0f }, 30*/);
+			tornadoForceGenerator = new TornadoForceGenerator( 0.99, 50, { 5.0f, 30.0f, 5.0f }/*, 35*/);
 			break;
 		}
 		case END: {

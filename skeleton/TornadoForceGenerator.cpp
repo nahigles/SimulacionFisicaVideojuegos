@@ -1,6 +1,6 @@
 #include "TornadoForceGenerator.h"
 
-TornadoForceGenerator::TornadoForceGenerator(Vector3 vel, float k, float kTornado, Vector3 center, float r, bool visible):WindForceGenerator(vel,k, 0,center, { 0.0f,0.0f,0.0f }, r, visible)
+TornadoForceGenerator::TornadoForceGenerator(float k, float kTornado, Vector3 center, float r, bool visible):WindForceGenerator({ 0.0f,0.0f,0.0f },k, 0,center, { 0.0f,0.0f,0.0f }, r, visible)
 {
 	centerPos = center;
 	this->k = kTornado;
