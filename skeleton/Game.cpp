@@ -64,7 +64,7 @@ void Game::update(double t)
 			// Sphere shape
 			gravityForceGenerator3 = new GravityForceGenerator(15.0f, { 0.0f, 60.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, 30);
 			windForceGenerator = new WindForceGenerator({ 0.0f, 60.0f, 0.0f }, 0.99, 0, { 5.0f, 30.0f, 5.0f }, { 0.0f, 0.0f, 0.0f }, 30);
-
+			tornadoForceGenerator = new TornadoForceGenerator({ 0.0f, 0.0f, 0.0f }, 0.99, 50, { 5.0f, 30.0f, 5.0f }/*, 35*/);
 			break;
 		}
 		case END: {
@@ -248,6 +248,16 @@ void Game::keyPressed(unsigned char key)
 		}
 		break;
 	}
+	case 'B':
+	{
+		if (_state == FORCES) {
+			// Tornadoo
+			ParticleSystem* pSystem = new ParticleSystem({ 30.0f, 30.0f, 9.0f }, { 20.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, 7, { 0.0f, 0.0f, 0.0f,  0.0f }, 10, 0.05, 10, 10, COLOURFULL);
+			particleSystems.push_back(pSystem);
+			pSystem->addForceGenerator(tornadoForceGenerator);
+		}
+		break;
+	} 
 	case 'M':
 	{
 		deleteAll();
@@ -369,5 +379,10 @@ void Game::deleteForces()
 	if (windForceGenerator != nullptr) {
 		delete windForceGenerator;
 		windForceGenerator = nullptr;
+	}
+
+	if (tornadoForceGenerator != nullptr) {
+		delete tornadoForceGenerator;
+		tornadoForceGenerator = nullptr;
 	}
 }

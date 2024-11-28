@@ -73,6 +73,12 @@ void ParticleSystem::createParticle()
 
 		break;
 	}
+	case NO_RANDOM:
+
+		posRandom = initialpos;
+		randomVel = initialVel;
+
+		break;
 	default:
 		break;
 		break;

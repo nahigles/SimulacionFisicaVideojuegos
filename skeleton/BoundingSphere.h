@@ -9,7 +9,7 @@ protected:
 	float r;
 
 public:
-	BoundingSphere(Vector3 centerPoint, float radius );
+	BoundingSphere(Vector3 centerPoint, float radius, bool visible = true);
 	bool isInside(Vector3 point) override;
 };
 

@@ -18,7 +18,7 @@ public:
 	};
 
 protected:
-	RenderItem* shapeItemRender;
+	RenderItem* shapeItemRender = nullptr;
 	physx::PxTransform shapeTransform;
 };
 

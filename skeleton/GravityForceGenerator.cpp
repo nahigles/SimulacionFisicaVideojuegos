@@ -1,6 +1,6 @@
 #include "GravityForceGenerator.h"
 
-GravityForceGenerator::GravityForceGenerator(float gravityAceleration, Vector3 p1, Vector3 p2, float r) :ForceGenerator(p1,p2,r)
+GravityForceGenerator::GravityForceGenerator(float gravityAceleration, Vector3 p1, Vector3 p2, float r, bool visible) :ForceGenerator(p1,p2,r, visible)
 {
 	aceleration = Vector3(0, -gravityAceleration, 0);
 

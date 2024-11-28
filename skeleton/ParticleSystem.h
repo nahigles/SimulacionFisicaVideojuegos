@@ -16,6 +16,7 @@ enum ParticleType {
 	SNOW,
 	FOAM,
 	COLOURFULL,
+	NO_RANDOM,
 	LAST_ELEM
 };
 

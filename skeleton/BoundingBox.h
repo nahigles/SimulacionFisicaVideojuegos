@@ -14,7 +14,7 @@ protected:
 	//physx::PxTransform shapeTransform;
 
 public:
-	BoundingBox(Vector3 point1, Vector3 point2);
+	BoundingBox(Vector3 point1, Vector3 point2, bool visible = true);
 	virtual bool isInside(Vector3 point);
 };
 
