@@ -14,7 +14,7 @@ protected:
 
 public:
 	ForceGenerator(Vector3 p1 = { 0.0f,0.0f,0.0f }, Vector3 p2 = { 0.0f,0.0f,0.0f }, float r = 0, bool visible = true);
-	virtual void update(Particle* p) = 0;
+	virtual void update(Particle* p, double t) = 0;
 	~ForceGenerator();
 };
 

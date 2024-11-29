@@ -50,10 +50,10 @@ void Particle::integrateSemi(double t)
 	vel = vel * pow(d, t);
 }
 
-void Particle::updateForces()
+void Particle::updateForces(double t)
 {
 	for (auto g : forces) {
-		g->update(this);
+		g->update(this, t);
 	}
 }
 
@@ -69,7 +69,7 @@ void Particle::update(double t)
 {
 
 	// update generadores
-	updateForces();
+	updateForces(t);
 
 	// Calcula aceleracion de la fuerza acumulada
 	acel = forceAcum * getInverseMass();

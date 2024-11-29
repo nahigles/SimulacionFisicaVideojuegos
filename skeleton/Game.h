@@ -8,6 +8,7 @@
 #include "GravityForceGenerator.h"
 #include "WindForceGenerator.h"
 #include "TornadoForceGenerator.h"
+#include "BlastForceGenerator.h"
 
 using namespace physx;
 using namespace std;
@@ -48,6 +49,7 @@ protected:
 
 	WindForceGenerator* windForceGenerator = nullptr;
 	TornadoForceGenerator* tornadoForceGenerator = nullptr;
+	BlastForceGenerator* blastForceGenerator = nullptr;
 
 public:
 	Game();
@@ -59,5 +61,6 @@ public:
 protected:
 	void deleteAll();
 	void deleteForces();
+	void createCircleOfParticles(Vector3 centerPosition);
 };
 

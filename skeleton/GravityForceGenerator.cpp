@@ -6,7 +6,7 @@ GravityForceGenerator::GravityForceGenerator(float gravityAceleration, Vector3 p
 
 }
 
-void GravityForceGenerator::update(Particle* p)
+void GravityForceGenerator::update(Particle* p, double t)
 {
 	if (usingBounding && boundingShape->isInside(p->getPos()) || !usingBounding) {
 		calculateForces(p);

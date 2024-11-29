@@ -41,6 +41,6 @@ protected:
 	// Si devuelve booleano que te diga si la particula esta viva o no
 	void integrate(double t); // Euler
 	void integrateSemi(double t); // Euler semiimplicito
-	void updateForces();
+	void updateForces(double t);
 };
 

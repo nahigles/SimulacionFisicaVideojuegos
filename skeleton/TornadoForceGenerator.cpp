@@ -6,7 +6,7 @@ TornadoForceGenerator::TornadoForceGenerator(float k, float kTornado, Vector3 ce
 	this->k = kTornado;
 }
 
-void TornadoForceGenerator::update(Particle* p)
+void TornadoForceGenerator::update(Particle* p, double t)
 {
 	Vector3 particlePos = p->getPos();
 	if (usingBounding && boundingShape->isInside(particlePos) || !usingBounding) {

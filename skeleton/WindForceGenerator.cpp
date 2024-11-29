@@ -7,7 +7,7 @@ WindForceGenerator::WindForceGenerator(Vector3 vel, float k1, float k2, Vector3 
 	velocity = vel;
 }
 
-void WindForceGenerator::update(Particle* p)
+void WindForceGenerator::update(Particle* p, double t)
 {
 	if (usingBounding && boundingShape->isInside(p->getPos()) || !usingBounding) {
 		calculateForce(p);
