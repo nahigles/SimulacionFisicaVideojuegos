@@ -300,9 +300,10 @@ void Game::keyPressed(unsigned char key)
 
 
 		// MUELLE CON ANCLAJE
-		Particle* p3 = new Particle({ -10.0, 20.0,0.0 }, { 0.0, 0.0,0.0 }, { 0.0, 0.0,0.0 }, 0.85, { 0.0, 0.0,0.0, 1.0 }, 2, 1);
-		anchoredSpringForceGenerator = new AnchoredSpringForceGenerator(1, 10, { 10.0,20.0, 0.0 });
+		Particle* p3 = new Particle({ -10.0, 50.0,0.0 }, { 0.0, 0.0,0.0 }, { 0.0, 0.0,0.0 }, 0.85, { 0.0, 0.0,0.0, 1.0 }, 2, 1);
+		anchoredSpringForceGenerator = new AnchoredSpringForceGenerator(1, 10, { 10.0,60.0, 0.0 });
 		p3->addForceGenerator(anchoredSpringForceGenerator);
+		p3->addForceGenerator(gravityForceGenerator2);
 		particulas.push_back(p3);
 
 		break;
