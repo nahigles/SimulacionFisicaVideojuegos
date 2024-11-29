@@ -281,6 +281,7 @@ void Game::keyPressed(unsigned char key)
 		break;
 	}
 	case 'Z': {
+		// MUELLE DOS PARTICULAS MOVIENDOSE
 		// 2 particulas
 		Particle* p1 = new Particle({ -10.0, 10.0,0.0 }, { 0.0, 0.0,0.0 }, { 0.0, 0.0,0.0 }, 0.85, { 0.0, 0.0,0.0, 1.0 }, 3, 1);
 		Particle* p2 = new Particle({ 10.0, 10.0,0.0 }, { 0.0, 0.0,0.0 }, { 0.0, 0.0,0.0 }, 0.85, { 1.0, 1.0,1.0, 1.0 }, 3, 2);
@@ -296,6 +297,13 @@ void Game::keyPressed(unsigned char key)
 		// Añado particulas a la lista de particulas
 		particulas.push_back(p1);
 		particulas.push_back(p2);
+
+
+		// MUELLE CON ANCLAJE
+		Particle* p3 = new Particle({ -10.0, 20.0,0.0 }, { 0.0, 0.0,0.0 }, { 0.0, 0.0,0.0 }, 0.85, { 0.0, 0.0,0.0, 1.0 }, 2, 1);
+		anchoredSpringForceGenerator = new AnchoredSpringForceGenerator(1, 10, { 10.0,20.0, 0.0 });
+		p3->addForceGenerator(anchoredSpringForceGenerator);
+		particulas.push_back(p3);
 
 		break;
 	}
