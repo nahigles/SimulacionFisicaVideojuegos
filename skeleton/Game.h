@@ -11,6 +11,7 @@
 #include "BlastForceGenerator.h"
 #include "SpringForceGenerator.h"
 #include "AnchoredSpringForceGenerator.h"
+#include "BouyancyForceGenerator.h"
 
 using namespace physx;
 using namespace std;
@@ -53,6 +54,7 @@ protected:
 	SpringForceGenerator* springForceGenerator1 = nullptr;
 	SpringForceGenerator* springForceGenerator2 = nullptr;
 	AnchoredSpringForceGenerator* anchoredSpringForceGenerator = nullptr;
+	BouyancyForceGenerator* bouyancyForceGenerator = nullptr;
 
 public:
 	Game();

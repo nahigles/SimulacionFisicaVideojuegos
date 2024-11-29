@@ -19,7 +19,7 @@ public:
 
 	bool isAlive();
 	inline double getLifeTime() const { return lifeTime; }
-	/*virtual*/ void update(double t);
+	void update(double t);
 	void addForceGenerator(ForceGenerator* force);
 	void addForce(Vector3 f);
 	inline double getMass() const { return masa; }
@@ -27,6 +27,8 @@ public:
 	inline void clearForces() { forceAcum = Vector3(0, 0, 0); }
 	inline Vector3 getPos() { return pose.p; }
 	inline Vector3 getVel() { return vel; }
+	inline double getHeight() { return size * 2; } // ALto
+	inline double getVolume() { return size * 2 * size * 2 * size * 2; } // Ancho * Largo * Alto (En este caso es un cubo asiq son iguales)
 
 protected:
 	Vector3 vel;
@@ -38,6 +40,7 @@ protected:
 	bool alive;
 	double lifeTime;
 	double masa;
+	double size;
 
 	// Fuerzas
 	std::list<ForceGenerator*> forces;

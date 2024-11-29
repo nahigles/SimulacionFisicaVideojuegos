@@ -306,6 +306,27 @@ void Game::keyPressed(unsigned char key)
 		p3->addForceGenerator(gravityForceGenerator2);
 		particulas.push_back(p3);
 
+
+		// FLOTACION
+		
+		// Con este rebota
+		//float y = 20.0;
+		//Particle* p4 = new Particle({ 70,y,0 }, { 0,0,0 }, { 0,0,0 }, 0.98, { 0.87, 0.3, 0.22, 1.0 }, 2, 2, CUBO);
+		//bouyancyForceGenerator = new BouyancyForceGenerator(y, 1000);
+
+		// Flota
+		Particle* p4 = new Particle({ 70,5,0 }, { 0,0,0 }, { 0,0,0 }, 0.98, { 0.87, 0.3, 0.22, 1.0 }, 2, 2, CUBO);
+		bouyancyForceGenerator = new BouyancyForceGenerator(4, 1000);
+
+		// Equilibrio
+	/*	Particle* p4 = new Particle({ 70,2,0 }, { 0,0,0 }, { 0,0,0 }, 0.98, { 0.87, 0.3, 0.22, 1.0 }, 2, 2, CUBO);
+		bouyancyForceGenerator = new BouyancyForceGenerator(4, 1000);*/
+
+		// Para que se vaya al fondo serviria poniendo valores mas bajos que el anterior
+		p4->addForceGenerator(bouyancyForceGenerator);
+		p4->addForceGenerator(gravityForceGenerator);
+		particulas.push_back(p4);
+
 		break;
 	}
 	case 'M':
@@ -450,6 +471,17 @@ void Game::deleteForces()
 		delete springForceGenerator2;
 		springForceGenerator2 = nullptr;
 	}
+
+	if (anchoredSpringForceGenerator != nullptr) {
+		delete anchoredSpringForceGenerator;
+		anchoredSpringForceGenerator = nullptr;
+	}
+
+	if (bouyancyForceGenerator != nullptr) {
+		delete bouyancyForceGenerator;
+		bouyancyForceGenerator = nullptr;
+	}
+	
 	
 }
 

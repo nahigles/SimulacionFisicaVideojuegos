@@ -11,6 +11,7 @@ Particle::Particle(Vector3 pos, Vector3 vel, Vector3 acel, double damping, Vecto
 	pose = physx::PxTransform(pos);
 	this->vel = vel;
 	this->acel = acel;
+	this->size = size;
 	d = damping;
 	if (f == ESFERA)
 		renderItem = new RenderItem(CreateShape(physx::PxSphereGeometry(size)), &pose, color);
