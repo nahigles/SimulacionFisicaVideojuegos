@@ -66,6 +66,7 @@ void Game::update(double t)
 			windForceGenerator = new WindForceGenerator({ 0.0f, 60.0f, 0.0f }, 0.99/*, 0, { 5.0f, 30.0f, 5.0f }, { 0.0f, 0.0f, 0.0f }, 30*/);
 			tornadoForceGenerator = new TornadoForceGenerator(0.99, 50, { 5.0f, 30.0f, 5.0f }/*, 35*/);
 			blastForceGenerator = new BlastForceGenerator(500, 60, { 0.0f,50.0f,0.0f });
+
 			break;
 		}
 		case END: {
@@ -279,6 +280,25 @@ void Game::keyPressed(unsigned char key)
 		}
 		break;
 	}
+	case 'Z': {
+		// 2 particulas
+		Particle* p1 = new Particle({ -10.0, 10.0,0.0 }, { 0.0, 0.0,0.0 }, { 0.0, 0.0,0.0 }, 0.85, { 0.0, 0.0,0.0, 1.0 }, 3, 1);
+		Particle* p2 = new Particle({ 10.0, 10.0,0.0 }, { 0.0, 0.0,0.0 }, { 0.0, 0.0,0.0 }, 0.85, { 1.0, 1.0,1.0, 1.0 }, 3, 2);
+
+		// Creo generadores de fuerza
+		springForceGenerator1 = new SpringForceGenerator(1, 10, p2);
+		springForceGenerator2 = new SpringForceGenerator(1, 10, p1);
+
+		// Añado generadores de fuerza a las particulas
+		p1->addForceGenerator(springForceGenerator1);
+		p2->addForceGenerator(springForceGenerator2);
+
+		// Añado particulas a la lista de particulas
+		particulas.push_back(p1);
+		particulas.push_back(p2);
+
+		break;
+	}
 	case 'M':
 	{
 		deleteAll();
@@ -412,6 +432,16 @@ void Game::deleteForces()
 		blastForceGenerator = nullptr;
 	}
 
+	if (springForceGenerator1 != nullptr) {
+		delete springForceGenerator1;
+		springForceGenerator1 = nullptr;
+	}
+
+	if (springForceGenerator2 != nullptr) {
+		delete springForceGenerator2;
+		springForceGenerator2 = nullptr;
+	}
+	
 }
 
 void Game::createCircleOfParticles(Vector3 centerPosition)

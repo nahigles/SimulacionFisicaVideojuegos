@@ -6,13 +6,17 @@
 // PUBLIC
 
 // Constructor
-Particle::Particle(Vector3 pos, Vector3 vel, Vector3 acel, double damping, Vector4 color, float size, double m)
+Particle::Particle(Vector3 pos, Vector3 vel, Vector3 acel, double damping, Vector4 color, float size, double m, Forma f)
 {
 	pose = physx::PxTransform(pos);
 	this->vel = vel;
 	this->acel = acel;
 	d = damping;
-	renderItem = new RenderItem(CreateShape(physx::PxSphereGeometry(size)), &pose, color);
+	if (f == ESFERA)
+		renderItem = new RenderItem(CreateShape(physx::PxSphereGeometry(size)), &pose, color);
+	else if (f == CUBO)
+		renderItem = new RenderItem(CreateShape(physx::PxBoxGeometry(Vector3(size/2, size/2, size/2))), &pose, color);
+
 	alive = true;
 	lifeTime = 0;
 	forceAcum = { 0.0,0.0,0.0 };

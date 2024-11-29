@@ -9,6 +9,8 @@
 #include "WindForceGenerator.h"
 #include "TornadoForceGenerator.h"
 #include "BlastForceGenerator.h"
+#include "SpringForceGenerator.h"
+#include "AnchoredSpringForceGenerator.h"
 
 using namespace physx;
 using namespace std;
@@ -32,11 +34,8 @@ protected:
 	RenderItem* xRenderItem = NULL, * yRenderItem = NULL, * zRenderItem = NULL, * originRenderItem = NULL;
 	PxTransform x, y, z, origin;
 
-	//Particle* particle = nullptr;
-	//Particle* particleG1 = nullptr;
-	//Particle* particleG2 = nullptr;
 
-	list<Particle*> particulas;
+	list<Particle*> particulas; // Particulas
 
 	list<Projectile*> projectiles; // LISTA PROYECTILES
 
@@ -47,9 +46,13 @@ protected:
 	GravityForceGenerator* gravityForceGenerator2 = nullptr;
 	GravityForceGenerator* gravityForceGenerator3 = nullptr;
 
+	// Otras fuerzas
 	WindForceGenerator* windForceGenerator = nullptr;
 	TornadoForceGenerator* tornadoForceGenerator = nullptr;
 	BlastForceGenerator* blastForceGenerator = nullptr;
+	SpringForceGenerator* springForceGenerator1 = nullptr;
+	SpringForceGenerator* springForceGenerator2 = nullptr;
+	AnchoredSpringForceGenerator* anchoredSpringForceGenerator = nullptr;
 
 public:
 	Game();

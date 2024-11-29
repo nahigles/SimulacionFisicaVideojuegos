@@ -5,10 +5,15 @@
 
 class ForceGenerator;
 
+enum Forma {
+	CUBO,
+	ESFERA
+};
+
 class Particle
 {
 public:
-	Particle(Vector3 pos, Vector3 vel, Vector3 acel, double damping, Vector4 color, float size, double m);
+	Particle(Vector3 pos, Vector3 vel, Vector3 acel, double damping, Vector4 color, float size, double m, Forma f = ESFERA);
 	Particle() {};
 	~Particle();
 

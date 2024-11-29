@@ -253,6 +253,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AnchoredSpringForceGenerator.cpp" />
     <ClCompile Include="BlastForceGenerator.cpp" />
     <ClCompile Include="Bounding.cpp" />
     <ClCompile Include="BoundingBox.cpp" />
@@ -268,11 +269,13 @@
     <ClCompile Include="RenderUtils.cpp" />
     <ClCompile Include="Render\Camera.cpp" />
     <ClCompile Include="Render\Render.cpp" />
+    <ClCompile Include="SpringForceGenerator.cpp" />
     <ClCompile Include="TornadoForceGenerator.cpp" />
     <ClCompile Include="Vector3D.cpp" />
     <ClCompile Include="WindForceGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AnchoredSpringForceGenerator.h" />
     <ClInclude Include="BlastForceGenerator.h" />
     <ClInclude Include="Bounding.h" />
     <ClInclude Include="BoundingBox.h" />
@@ -288,6 +291,7 @@
     <ClInclude Include="RenderUtils.hpp" />
     <ClInclude Include="Render\Camera.h" />
     <ClInclude Include="Render\Render.h" />
+    <ClInclude Include="SpringForceGenerator.h" />
     <ClInclude Include="TornadoForceGenerator.h" />
     <ClInclude Include="Vector3D.h" />
     <ClInclude Include="WindForceGenerator.h" />
