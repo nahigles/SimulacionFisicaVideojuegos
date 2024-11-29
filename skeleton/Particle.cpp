@@ -6,7 +6,7 @@
 // PUBLIC
 
 // Constructor
-Particle::Particle(Vector3 pos, Vector3 vel, Vector3 acel, double damping, Vector4 color,  float size, double m)
+Particle::Particle(Vector3 pos, Vector3 vel, Vector3 acel, double damping, Vector4 color, float size, double m)
 {
 	pose = physx::PxTransform(pos);
 	this->vel = vel;
@@ -72,7 +72,8 @@ void Particle::update(double t)
 	updateForces(t);
 
 	// Calcula aceleracion de la fuerza acumulada
-	acel = forceAcum * getInverseMass();
+	if (masa > 0) // No dividir 0
+		acel = forceAcum * getInverseMass();
 
 	integrateSemi(t);
 

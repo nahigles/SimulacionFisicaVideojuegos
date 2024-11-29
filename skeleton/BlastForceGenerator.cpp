@@ -26,16 +26,6 @@ void BlastForceGenerator::update(Particle* p, double t)
 
 		}
 	}
-
-	//time += t;
-	//float distDiff = (particlePos - centerPos).magnitude();
-	//const float timeConst = 20.0f;
-	//if (time < 4 * timeConst) {
-	//	r = velocity.magnitude() * time;
-
-	//	force = (k / (distDiff * distDiff)) * (particlePos - centerPos) * exp(-time / timeConst);
-	//	if (distDiff < r) p->addForce(force);
-	//}
 }
 
 void BlastForceGenerator::activateBlast()

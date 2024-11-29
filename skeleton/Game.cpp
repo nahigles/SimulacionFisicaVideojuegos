@@ -62,7 +62,7 @@ void Game::update(double t)
 			//gravityForceGenerator3 = new GravityForceGenerator(15.0f, { -20.0f, 10.0f, -20.0f }, { -15.0f, 60.0f, 20.0f });
 
 			// Sphere shape
-			gravityForceGenerator3 = new GravityForceGenerator(15.0f, { 0.0f, 60.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, 30);
+			gravityForceGenerator3 = new GravityForceGenerator(15.0f, { 0.0f, 60.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, 30, false);
 			windForceGenerator = new WindForceGenerator({ 0.0f, 60.0f, 0.0f }, 0.99/*, 0, { 5.0f, 30.0f, 5.0f }, { 0.0f, 0.0f, 0.0f }, 30*/);
 			tornadoForceGenerator = new TornadoForceGenerator(0.99, 50, { 5.0f, 30.0f, 5.0f }/*, 35*/);
 			blastForceGenerator = new BlastForceGenerator(500, 60, { 0.0f,50.0f,0.0f });
@@ -417,12 +417,13 @@ void Game::deleteForces()
 void Game::createCircleOfParticles(Vector3 centerPosition)
 {
 
-	// En cada particula añado el generador de fuerzas de la explosion 
+	// En cada particula añado el generador de fuerzas de la explosion
+	int masa = 1;
 	for (int i = -25; i <= 25; i += 10) {
 
-		Particle* p1 = new Particle(Vector3(centerPosition.x + i, centerPosition.y, centerPosition.z), { 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, 0.98, { 1.0,0.0,0.0,1.0 }, 1, 2);
-		Particle* p2 = new Particle(Vector3(centerPosition.x, centerPosition.y + i, centerPosition.z), { 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, 0.98, { 0.0,1.0,0.0,1.0 }, 1.5, 4);
-		Particle* p3 = new Particle(Vector3(centerPosition.x, centerPosition.y, centerPosition.z + i), { 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, 0.98, { 0.0,0.0,1.0,1.0 }, 2, 6);
+		Particle* p1 = new Particle(Vector3(centerPosition.x + i, centerPosition.y, centerPosition.z), { 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, 0.98, { 1.0,0.0,0.0,1.0 }, 1, masa);
+		Particle* p2 = new Particle(Vector3(centerPosition.x, centerPosition.y + i, centerPosition.z), { 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, 0.98, { 0.0,1.0,0.0,1.0 }, 1.5, masa + 1);
+		Particle* p3 = new Particle(Vector3(centerPosition.x, centerPosition.y, centerPosition.z + i), { 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, 0.98, { 0.0,0.0,1.0,1.0 }, 2, masa + 2);
 
 		p1->addForceGenerator(blastForceGenerator);
 		p2->addForceGenerator(blastForceGenerator);
@@ -431,5 +432,7 @@ void Game::createCircleOfParticles(Vector3 centerPosition)
 		particulas.push_back(p1);
 		particulas.push_back(p2);
 		particulas.push_back(p3);
+
+		masa++;
 	}
 }
