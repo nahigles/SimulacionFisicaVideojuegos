@@ -62,7 +62,7 @@ void Game::update(double t)
 			//gravityForceGenerator3 = new GravityForceGenerator(15.0f, { -20.0f, 10.0f, -20.0f }, { -15.0f, 60.0f, 20.0f });
 
 			// Sphere shape
-			gravityForceGenerator3 = new GravityForceGenerator(15.0f, { 0.0f, 60.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, 30, false);
+			gravityForceGenerator3 = new GravityForceGenerator(15.0f, { 0.0f, 60.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, 30);
 			windForceGenerator = new WindForceGenerator({ 0.0f, 60.0f, 0.0f }, 0.99/*, 0, { 5.0f, 30.0f, 5.0f }, { 0.0f, 0.0f, 0.0f }, 30*/);
 			tornadoForceGenerator = new TornadoForceGenerator(0.99, 50, { 5.0f, 30.0f, 5.0f }/*, 35*/);
 			blastForceGenerator = new BlastForceGenerator(500, 60, { 0.0f,50.0f,0.0f });
@@ -315,14 +315,14 @@ void Game::keyPressed(unsigned char key)
 		//bouyancyForceGenerator = new BouyancyForceGenerator(y, 1000);
 
 		// Flota
-		//float y = 5.0;
-		//Particle* p4 = new Particle({ 70,y,0 }, { 0,0,0 }, { 0,0,0 }, 0.98, { 0.87, 0.3, 0.22, 1.0 }, 2, 2, CUBO);
-		//bouyancyForceGenerator = new BouyancyForceGenerator(y, 1000);
-
-		// Equilibrio
-		float y = 2.0;
+		float y = 5.0;
 		Particle* p4 = new Particle({ 70,y,0 }, { 0,0,0 }, { 0,0,0 }, 0.98, { 0.87, 0.3, 0.22, 1.0 }, 2, 2, CUBO);
 		bouyancyForceGenerator = new BouyancyForceGenerator(y, 1000);
+
+		// Equilibrio
+		//float y = 2.0;
+		//Particle* p4 = new Particle({ 70,y,0 }, { 0,0,0 }, { 0,0,0 }, 0.98, { 0.87, 0.3, 0.22, 1.0 }, 2, 2, CUBO);
+		//bouyancyForceGenerator = new BouyancyForceGenerator(y, 1000);
 
 		// Para que se vaya al fondo serviria poniendo valores mas bajos que el anterior
 		p4->addForceGenerator(bouyancyForceGenerator);
