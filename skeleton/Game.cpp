@@ -315,12 +315,14 @@ void Game::keyPressed(unsigned char key)
 		//bouyancyForceGenerator = new BouyancyForceGenerator(y, 1000);
 
 		// Flota
-		Particle* p4 = new Particle({ 70,5,0 }, { 0,0,0 }, { 0,0,0 }, 0.98, { 0.87, 0.3, 0.22, 1.0 }, 2, 2, CUBO);
-		bouyancyForceGenerator = new BouyancyForceGenerator(4, 1000);
+		//float y = 5.0;
+		//Particle* p4 = new Particle({ 70,y,0 }, { 0,0,0 }, { 0,0,0 }, 0.98, { 0.87, 0.3, 0.22, 1.0 }, 2, 2, CUBO);
+		//bouyancyForceGenerator = new BouyancyForceGenerator(y, 1000);
 
 		// Equilibrio
-	/*	Particle* p4 = new Particle({ 70,2,0 }, { 0,0,0 }, { 0,0,0 }, 0.98, { 0.87, 0.3, 0.22, 1.0 }, 2, 2, CUBO);
-		bouyancyForceGenerator = new BouyancyForceGenerator(4, 1000);*/
+		float y = 2.0;
+		Particle* p4 = new Particle({ 70,y,0 }, { 0,0,0 }, { 0,0,0 }, 0.98, { 0.87, 0.3, 0.22, 1.0 }, 2, 2, CUBO);
+		bouyancyForceGenerator = new BouyancyForceGenerator(y, 1000);
 
 		// Para que se vaya al fondo serviria poniendo valores mas bajos que el anterior
 		p4->addForceGenerator(bouyancyForceGenerator);
