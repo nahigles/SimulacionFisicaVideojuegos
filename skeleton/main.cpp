@@ -66,7 +66,7 @@ void initPhysics(bool interactive)
 	gScene = gPhysics->createScene(sceneDesc);
 
 	// Inicializar game
-	_game = new Game();
+	_game = new Game(gPhysics, gScene);
 }
 
 

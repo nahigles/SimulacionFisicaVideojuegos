@@ -12,6 +12,7 @@
 #include "SpringForceGenerator.h"
 #include "AnchoredSpringForceGenerator.h"
 #include "BouyancyForceGenerator.h"
+#include "RigidSolid.h"
 
 using namespace physx;
 using namespace std;
@@ -21,14 +22,19 @@ enum State
 	START = 0,
 	GAME,
 	FORCES,
+	RIGID_SOLID,
 	END,
 	LAST_STATE
 
 };
 
+
 class Game
 {
 protected:
+	physx::PxPhysics* gPhysics = nullptr;
+	physx::PxScene* gScene = nullptr;
+	
 	State _state;
 	State _nextState;
 
@@ -56,8 +62,11 @@ protected:
 	AnchoredSpringForceGenerator* anchoredSpringForceGenerator = nullptr;
 	BouyancyForceGenerator* bouyancyForceGenerator = nullptr;
 
+	// Solido Rigido
+	RigidSolid* rigidSolid = nullptr;
+
 public:
-	Game();
+	Game(physx::PxPhysics* physics, physx::PxScene* scene);
 	void nextState();
 	void update(double t);
 	void keyPressed(unsigned char key);

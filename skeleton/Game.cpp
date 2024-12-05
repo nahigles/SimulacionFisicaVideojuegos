@@ -1,8 +1,11 @@
 #include "Game.h"
 #include "Vector3D.h"
 
-Game::Game()
+Game::Game(physx::PxPhysics* physics, physx::PxScene* scene)
 {
+	gPhysics = physics;
+	gScene = scene;
+
 	_state = START;
 	_nextState = START;
 
@@ -69,6 +72,10 @@ void Game::update(double t)
 
 			break;
 		}
+		case RIGID_SOLID: {
+			std::cout << "Rigid Solid State" << endl;
+			break;
+		}
 		case END: {
 
 			std::cout << "End State" << endl;
@@ -126,6 +133,9 @@ void Game::update(double t)
 
 		break;
 	}
+	case RIGID_SOLID: {
+		break;
+	}
 	case END: {
 
 		break;
@@ -169,6 +179,9 @@ void Game::keyPressed(unsigned char key)
 			ParticleSystem* pSystem = new ParticleSystem({ 0.0,50.0,0.0 }, { 0.0, -10.0, 0.0 }, { 0.0, 0.5, 0.0 }, 0.5, { 1.0, 1.0, 1.0, 0.0 }, 9.0, 0.05, 20, 5, SNOW);
 			particleSystems.push_back(pSystem);
 			pSystem->addForceGenerator(gravityForceGenerator);
+		}
+		else if (_state == RIGID_SOLID) {
+			rigidSolid = new RigidSolid(gPhysics, gScene, {1,1,-1});
 		}
 		break;
 	}
