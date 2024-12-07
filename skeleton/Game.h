@@ -13,6 +13,7 @@
 #include "AnchoredSpringForceGenerator.h"
 #include "BouyancyForceGenerator.h"
 #include "RigidSolid.h"
+#include "SolidRigidSystem.h"
 
 using namespace physx;
 using namespace std;
@@ -47,6 +48,8 @@ protected:
 	list<Projectile*> projectiles; // LISTA PROYECTILES
 
 	list<ParticleSystem*> particleSystems; // SISTEMA DE PARTICULAS
+
+	list<SolidRigidSystem*> solidRigidSystems; // SISTEMA DE SOLIDOS RIGIDOS
 
 	// Gravedad
 	GravityForceGenerator* gravityForceGenerator = nullptr;

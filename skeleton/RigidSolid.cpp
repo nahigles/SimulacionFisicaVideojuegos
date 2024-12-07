@@ -1,6 +1,6 @@
 #include "RigidSolid.h"
 
-RigidSolid::RigidSolid(physx::PxPhysics* physics, physx::PxScene* scene, Vector3 materialInfo, Vector3 pos, Vector4 color, float size, ShapeRS s)
+RigidSolid::RigidSolid(physx::PxPhysics* physics, physx::PxScene* scene, Vector3 materialInfo, Vector3 pos, Vector4 color, float lifeTime, float size, ShapeRS s)
 {
 	// Fisikas
 	gPhysics = physics;
@@ -13,12 +13,10 @@ RigidSolid::RigidSolid(physx::PxPhysics* physics, physx::PxScene* scene, Vector3
 	this->acel = acel;
 	this->forceAcum = acel;
 	
-	//this->renderItem;
-	//this->d = damping; // dumping (Entre 0 y 1)
 	this->size = size;
 	//masa = m;
 	alive = true;
-	lifeTime = 0;
+	this->lifeTime = lifeTime;
 
 	physx::PxSphereGeometry sphere(size);
 
@@ -30,9 +28,34 @@ RigidSolid::RigidSolid(physx::PxPhysics* physics, physx::PxScene* scene, Vector3
 	}
 
 	//shape = CreateShape(sphere);
-	body = physics->createRigidDynamic(pose);
-	actor = body;
-	scene->addActor(*body);
-	body->attachShape(*shape);
-	renderItem = new RenderItem(shape, body, color);
+	rigidbody = physics->createRigidDynamic(pose);
+	actor = rigidbody;
+	scene->addActor(*rigidbody);
+	rigidbody->attachShape(*shape);
+	renderItem = new RenderItem(shape, rigidbody, color);
+}
+
+void RigidSolid::update(double t)
+{
+	timer += t;
+}
+
+bool RigidSolid::isAlive()
+{
+	if (pose.p.y <= 0 || timer >= lifeTime)
+		alive = false;
+
+	return alive;
+}
+
+void RigidSolid::setVelocity(Vector3 v)
+{
+	rigidbody->setLinearVelocity(v);
+}
+
+void RigidSolid::setPosition(Vector3 p)
+{
+	auto aux = actor->getGlobalPose();
+	aux.p = p;
+	actor->setGlobalPose(aux);
 }

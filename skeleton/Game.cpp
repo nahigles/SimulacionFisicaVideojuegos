@@ -134,6 +134,12 @@ void Game::update(double t)
 		break;
 	}
 	case RIGID_SOLID: {
+		std::list<SolidRigidSystem*>::iterator it2 = solidRigidSystems.begin();
+		while (it2 != solidRigidSystems.end()) {
+
+			(*it2)->update(t);
+			++it2;
+		}
 		break;
 	}
 	case END: {
@@ -180,8 +186,9 @@ void Game::keyPressed(unsigned char key)
 			particleSystems.push_back(pSystem);
 			pSystem->addForceGenerator(gravityForceGenerator);
 		}
+		// SOLIDO RIGIDO
 		else if (_state == RIGID_SOLID) {
-			rigidSolid = new RigidSolid(gPhysics, gScene, {1,1,-1});
+			rigidSolid = new RigidSolid(gPhysics, gScene, {1,1,-1}, { 0.0,50.0,0.0 }, { 1.0, 1.0, 1.0, 1.0 }, 20, 2);
 		}
 		break;
 	}
@@ -192,6 +199,9 @@ void Game::keyPressed(unsigned char key)
 			ParticleSystem* pSystem = new ParticleSystem({ 0.0,50.0,0.0 }, { 10.0, 10.0, 0.0 }, { 0.0, 10.0, 0.0 }, 4, { 1.0, 1.0, 1.0, 1.0 }, 9.0, 0.05, 5, 15, FOAM);
 			particleSystems.push_back(pSystem);
 			pSystem->addForceGenerator(gravityForceGenerator);
+		}
+		else if (_state == RIGID_SOLID) {
+			solidRigidSystems.push_back(new SolidRigidSystem(gPhysics, gScene, { 0,50,0 }, {5,0,0}, 0.5));
 		}
 		break;
 	}
