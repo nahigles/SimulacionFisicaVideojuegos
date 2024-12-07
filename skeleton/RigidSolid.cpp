@@ -7,32 +7,48 @@ RigidSolid::RigidSolid(physx::PxPhysics* physics, physx::PxScene* scene, Vector3
 	gScene = scene;
 
 	pose = physx::PxTransform(pos);
-	physx::PxShape* shape;
 
 	this->vel = vel;
 	this->acel = acel;
 	this->forceAcum = acel;
-	
+
 	this->size = size;
 	//masa = m;
 	alive = true;
 	this->lifeTime = lifeTime;
 
 	physx::PxSphereGeometry sphere(size);
+	physx::PxBoxGeometry box(size, size, size);
+
 
 	// Material fisico
 	if (materialInfo != Vector3(-1, -1, -1)) {
 		physx::PxMaterial* mMaterial;
 		mMaterial = gPhysics->createMaterial(materialInfo.x, materialInfo.y, materialInfo.z);
-		shape = CreateShape(sphere, mMaterial);
+
+		// Crea forma
+		if (s == SPHERE_RS)
+			shape = CreateShape(sphere, mMaterial);
+		else if (s == BOX_RS)
+			shape = CreateShape(box, mMaterial);
+
 	}
 
-	//shape = CreateShape(sphere);
 	rigidbody = physics->createRigidDynamic(pose);
 	actor = rigidbody;
 	scene->addActor(*rigidbody);
 	rigidbody->attachShape(*shape);
 	renderItem = new RenderItem(shape, rigidbody, color);
+}
+
+RigidSolid::~RigidSolid()
+{
+	if (renderItem != nullptr) {
+		DeregisterRenderItem(renderItem);
+		renderItem = nullptr;
+	}
+	shape->release();
+	static_cast<physx::PxRigidDynamic*>(rigidbody)->release();
 }
 
 void RigidSolid::update(double t)

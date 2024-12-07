@@ -134,6 +134,16 @@ void Game::update(double t)
 		break;
 	}
 	case RIGID_SOLID: {
+
+		if (rigidSolid != nullptr) {
+
+			rigidSolid->update(t);
+			if (!rigidSolid->isAlive()) {
+				delete rigidSolid;
+				rigidSolid = nullptr;
+			}
+		}
+
 		std::list<SolidRigidSystem*>::iterator it2 = solidRigidSystems.begin();
 		while (it2 != solidRigidSystems.end()) {
 
@@ -188,7 +198,7 @@ void Game::keyPressed(unsigned char key)
 		}
 		// SOLIDO RIGIDO
 		else if (_state == RIGID_SOLID) {
-			rigidSolid = new RigidSolid(gPhysics, gScene, {1,1,-1}, { 0.0,50.0,0.0 }, { 1.0, 1.0, 1.0, 1.0 }, 20, 2);
+			rigidSolid = new RigidSolid(gPhysics, gScene, { 1,1,-1 }, { 0.0,50.0,0.0 }, { 1.0, 1.0, 1.0, 1.0 }, 5, 2, BOX_RS);
 		}
 		break;
 	}
@@ -201,7 +211,7 @@ void Game::keyPressed(unsigned char key)
 			pSystem->addForceGenerator(gravityForceGenerator);
 		}
 		else if (_state == RIGID_SOLID) {
-			solidRigidSystems.push_back(new SolidRigidSystem(gPhysics, gScene, { 0,50,0 }, {5,0,0}, 0.5));
+			solidRigidSystems.push_back(new SolidRigidSystem(gPhysics, gScene, { 0,50,0 }, { 5,0,0 }, 0.5));
 		}
 		break;
 	}
@@ -331,7 +341,7 @@ void Game::keyPressed(unsigned char key)
 
 
 		// FLOTACION
-		
+
 		// Con este rebota
 		//float y = 20.0;
 		//Particle* p4 = new Particle({ 70,y,0 }, { 0,0,0 }, { 0,0,0 }, 0.98, { 0.87, 0.3, 0.22, 1.0 }, 2, 2, CUBO);
@@ -506,8 +516,8 @@ void Game::deleteForces()
 		delete bouyancyForceGenerator;
 		bouyancyForceGenerator = nullptr;
 	}
-	
-	
+
+
 }
 
 void Game::createCircleOfParticles(Vector3 centerPosition)

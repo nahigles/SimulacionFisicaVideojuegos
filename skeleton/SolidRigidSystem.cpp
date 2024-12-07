@@ -47,6 +47,6 @@ SolidRigidSystem::~SolidRigidSystem()
 void SolidRigidSystem::createElement()
 {
 	RigidSolid* rS = new RigidSolid(gPhysics, gScene, { 0.5,0.5,0.5 }, { 0.0,70,0 }, { 1,1,1,1 }, 20, 2);
-	rS->setVelocity({ 5,0,0 });
+	//rS->setVelocity({ 5,0,0 });
 	solidoRigidos.push_back(rS);
 }
