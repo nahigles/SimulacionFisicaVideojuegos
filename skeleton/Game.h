@@ -13,7 +13,7 @@
 #include "AnchoredSpringForceGenerator.h"
 #include "BouyancyForceGenerator.h"
 #include "RigidSolid.h"
-#include "SolidRigidSystem.h"
+#include "RigidSolidSystem.h"
 
 using namespace physx;
 using namespace std;
@@ -49,7 +49,7 @@ protected:
 
 	list<ParticleSystem*> particleSystems; // SISTEMA DE PARTICULAS
 
-	list<SolidRigidSystem*> solidRigidSystems; // SISTEMA DE SOLIDOS RIGIDOS
+	list<RigidSolidSystem*> solidRigidSystems; // SISTEMA DE SOLIDOS RIGIDOS
 
 	// Gravedad
 	GravityForceGenerator* gravityForceGenerator = nullptr;
@@ -65,7 +65,7 @@ protected:
 	AnchoredSpringForceGenerator* anchoredSpringForceGenerator = nullptr;
 	BouyancyForceGenerator* bouyancyForceGenerator = nullptr;
 
-	// Solido Rigido
+	// Solido Rigido (hacer listaa!!)
 	RigidSolid* rigidSolid = nullptr;
 
 public:

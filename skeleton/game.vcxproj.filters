@@ -27,7 +27,7 @@
     <ClCompile Include="AnchoredSpringForceGenerator.cpp" />
     <ClCompile Include="BouyancyForceGenerator.cpp" />
     <ClCompile Include="RigidSolid.cpp" />
-    <ClCompile Include="SolidRigidSystem.cpp" />
+    <ClCompile Include="RigidSolidSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -56,7 +56,7 @@
     <ClInclude Include="AnchoredSpringForceGenerator.h" />
     <ClInclude Include="BouyancyForceGenerator.h" />
     <ClInclude Include="RigidSolid.h" />
-    <ClInclude Include="SolidRigidSystem.h" />
+    <ClInclude Include="RigidSolidSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

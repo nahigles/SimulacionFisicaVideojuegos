@@ -1,6 +1,6 @@
 #include "RigidSolid.h"
 
-RigidSolid::RigidSolid(physx::PxPhysics* physics, physx::PxScene* scene, Vector3 materialInfo, Vector3 pos, Vector4 color, float lifeTime, float size, ShapeRS s)
+RigidSolid::RigidSolid(physx::PxPhysics* physics, physx::PxScene* scene, float density, Vector3 materialInfo, Vector3 pos, Vector4 color, float lifeTime, float size, ShapeRS s)
 {
 	// Fisikas
 	gPhysics = physics;
@@ -13,7 +13,7 @@ RigidSolid::RigidSolid(physx::PxPhysics* physics, physx::PxScene* scene, Vector3
 	this->forceAcum = acel;
 
 	this->size = size;
-	//masa = m;
+	this->density = density;
 	alive = true;
 	this->lifeTime = lifeTime;
 
@@ -35,8 +35,13 @@ RigidSolid::RigidSolid(physx::PxPhysics* physics, physx::PxScene* scene, Vector3
 	}
 
 	rigidbody = physics->createRigidDynamic(pose);
+
+	// Distribucion de masas y momentos de inercia 
+	PxRigidBodyExt::updateMassAndInertia(*rigidbody, density);
+	masa = rigidbody->getMass();
+
 	actor = rigidbody;
-	scene->addActor(*rigidbody);
+	gScene->addActor(*rigidbody);
 	rigidbody->attachShape(*shape);
 	renderItem = new RenderItem(shape, rigidbody, color);
 }
@@ -74,4 +79,9 @@ void RigidSolid::setPosition(Vector3 p)
 	auto aux = actor->getGlobalPose();
 	aux.p = p;
 	actor->setGlobalPose(aux);
+}
+
+void RigidSolid::setInertia(Vector3 i)
+{
+	
 }

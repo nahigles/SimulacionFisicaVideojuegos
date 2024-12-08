@@ -27,7 +27,10 @@ protected:
 	double lifeTime;
 	float timer = 0;
 	double masa;
+	float density = 0.15;
 	double size;
+
+	// Forma
 	ShapeRS s;
 	physx::PxShape* shape = nullptr;
 
@@ -35,11 +38,12 @@ protected:
 	physx::PxRigidBody* rigidbody = nullptr;
 
 public:
-	RigidSolid(physx::PxPhysics* physics = nullptr, physx::PxScene* scene = nullptr, Vector3 materialInfo = Vector3(-1, -1, -1), Vector3 pos = { 1.0f, 1.0f,1.0f }, Vector4 color = { 1.0f, 1.0f,1.0f,1.0f },float lifeTime = 30.0f, float size = 1, ShapeRS s = ShapeRS::SPHERE_RS);
+	RigidSolid(physx::PxPhysics* physics, physx::PxScene* scene, float density, Vector3 materialInfo = Vector3(-1, -1, -1), Vector3 pos = { 1.0f, 1.0f,1.0f }, Vector4 color = { 1.0f, 1.0f,1.0f,1.0f },float lifeTime = 30.0f, float size = 1, ShapeRS s = ShapeRS::SPHERE_RS);
 	~RigidSolid();
 	void update(double t);
 	bool isAlive();
 	void setVelocity(Vector3 v);
 	void setPosition(Vector3 p);
+	void setInertia(Vector3 i);
 };
 
