@@ -73,7 +73,7 @@ void initPhysics(bool interactive)
 	// Inicializar game
 	_game = new Game(gPhysics, gScene);
 
-	// Creo suelo (TENGO QUE DELETEAR ESTO EN ALGUN MOMENTO)
+	// Creo suelo
 	suelo = gPhysics->createRigidStatic(PxTransform({ 0,0,0 }));
 	sueloShape = CreateShape(PxBoxGeometry(100, 0.1, 100));
 	suelo->attachShape(*sueloShape);
@@ -114,10 +114,10 @@ void cleanupPhysics(bool interactive)
 
 	gFoundation->release();
 
-	// Borro suelo
-	suelo->release();
-	sueloShape->release();
-	sueloRenderItem->release();
+	// Borro suelo // EL SUELO SE ELIMINA SOLO?
+	//suelo->release(); 
+	//sueloShape->release();
+	//sueloRenderItem->release();
 
 	delete _game;
 }

@@ -135,17 +135,29 @@ void Game::update(double t)
 	}
 	case RIGID_SOLID: {
 
-		if (rigidSolid != nullptr) {
+		std::list<RigidSolid*>::iterator it = rigidSolids.begin();
+		while (it != rigidSolids.end()) {
 
-			rigidSolid->update(t);
-			if (!rigidSolid->isAlive()) {
-				delete rigidSolid;
-				rigidSolid = nullptr;
+			(*it)->update(t);
+			if (!(*it)->isAlive()) {
+				delete (*it);
+				it = rigidSolids.erase(it);
 			}
+			else
+				++it;
 		}
 
-		std::list<RigidSolidSystem*>::iterator it2 = solidRigidSystems.begin();
-		while (it2 != solidRigidSystems.end()) {
+		//if (rigidSolid != nullptr) {
+
+		//	rigidSolid->update(t);
+		//	if (!rigidSolid->isAlive()) {
+		//		delete rigidSolid;
+		//		rigidSolid = nullptr;
+		//	}
+		//}
+
+		std::list<RigidSolidSystem*>::iterator it2 = rigidSolidSystems.begin();
+		while (it2 != rigidSolidSystems.end()) {
 
 			(*it2)->update(t);
 			++it2;
@@ -198,7 +210,10 @@ void Game::keyPressed(unsigned char key)
 		}
 		// SOLIDO RIGIDO
 		else if (_state == RIGID_SOLID) {
-			rigidSolid = new RigidSolid(gPhysics, gScene,0.20, { 1,1,-1 }, { 0.0,50.0,0.0 }, { 1.0, 1.0, 1.0, 1.0 }, 5, 2, BOX_RS);
+			RigidSolid* rs = new RigidSolid(gPhysics, gScene, 0.20, { 1,1,-1 }, { 0.0,50.0,0.0 }, { 1.0, 1.0, 1.0, 1.0 }, 5, 2, BOX_RS);
+			rs->addForceGenerator(gravityForceGenerator2); // COMPROBAR MIS FUERZAS SI FUNCIONAN
+			rigidSolids.push_back(rs);
+
 		}
 		break;
 	}
@@ -211,7 +226,7 @@ void Game::keyPressed(unsigned char key)
 			pSystem->addForceGenerator(gravityForceGenerator);
 		}
 		else if (_state == RIGID_SOLID) {
-			solidRigidSystems.push_back(new RigidSolidSystem(gPhysics, gScene, { 0,50,0 }, { 0,0,0 }, 0.5, { 0,0,0 }, { 50,50,50 }, COLOR));
+			rigidSolidSystems.push_back(new RigidSolidSystem(gPhysics, gScene, { 0,50,0 }, { 0,0,0 }, 0.5, { 0,0,0 }, { 50,50,50 }, COLOR));
 		}
 		break;
 	}
@@ -255,7 +270,7 @@ void Game::keyPressed(unsigned char key)
 	// Invierte gravedad
 	case 'F':
 	{
-		if (_state == FORCES)
+		if (_state == FORCES || _state == RIGID_SOLID)
 			gravityForceGenerator2->changeGravity(-gravityForceGenerator2->getGravity());
 		break;
 	}
@@ -463,6 +478,16 @@ void Game::deleteAll()
 	for (std::list<ParticleSystem*>::iterator it = particleSystems.begin(); it != particleSystems.end();) {
 		delete (*it);
 		it = particleSystems.erase(it);
+	}
+
+	for (std::list<RigidSolid*>::iterator it = rigidSolids.begin(); it != rigidSolids.end();) {
+		delete (*it);
+		it = rigidSolids.erase(it);
+	}
+
+	for (std::list<RigidSolidSystem*>::iterator it = rigidSolidSystems.begin(); it != rigidSolidSystems.end();) {
+		delete (*it);
+		it = rigidSolidSystems.erase(it);
 	}
 }
 

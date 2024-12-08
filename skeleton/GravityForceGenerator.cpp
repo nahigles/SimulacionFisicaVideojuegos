@@ -13,6 +13,13 @@ void GravityForceGenerator::update(Particle* p, double t)
 	}
 }
 
+void GravityForceGenerator::update(RigidSolid* rs, double t)
+{
+	if (usingBounding && boundingShape->isInside(rs->getPosition()) || !usingBounding) {
+		calculateForces(rs);
+	}
+}
+
 GravityForceGenerator::~GravityForceGenerator()
 {
 
@@ -23,4 +30,10 @@ void GravityForceGenerator::calculateForces(Particle* p)
 	// Calcula las fuerzas y las añade a la particula
 	force = p->getMass() * aceleration;
 	p->addForce(force);
+}
+
+void GravityForceGenerator::calculateForces(RigidSolid* rs)
+{
+	force = rs->getMass() * aceleration;
+	rs->addForce(force);
 }

@@ -49,7 +49,10 @@ protected:
 
 	list<ParticleSystem*> particleSystems; // SISTEMA DE PARTICULAS
 
-	list<RigidSolidSystem*> solidRigidSystems; // SISTEMA DE SOLIDOS RIGIDOS
+	list<RigidSolidSystem*> rigidSolidSystems; // SISTEMA DE SOLIDOS RIGIDOS
+
+	// Solido Rigido
+	list<RigidSolid*> rigidSolids;
 
 	// Gravedad
 	GravityForceGenerator* gravityForceGenerator = nullptr;
@@ -65,8 +68,6 @@ protected:
 	AnchoredSpringForceGenerator* anchoredSpringForceGenerator = nullptr;
 	BouyancyForceGenerator* bouyancyForceGenerator = nullptr;
 
-	// Solido Rigido (hacer listaa!!)
-	RigidSolid* rigidSolid = nullptr;
 
 public:
 	Game(physx::PxPhysics* physics, physx::PxScene* scene);

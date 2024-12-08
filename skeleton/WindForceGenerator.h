@@ -10,6 +10,7 @@ protected:
 public:
 	WindForceGenerator(Vector3 vel, float k1, float k2 = 0, Vector3 p1 = { 0.0f,0.0f,0.0f }, Vector3 p2 = { 0.0f,0.0f,0.0f }, float r = 0, bool visible = true);
 	virtual void update(Particle* p, double t);
+	virtual void update(RigidSolid* rs, double t) override {};
 
 protected:
 	virtual void calculateForce(Particle* p);

@@ -1,8 +1,11 @@
 #pragma once
 #include "core.hpp"
 #include "RenderUtils.hpp"
+#include <list>
 
 using namespace physx;
+
+class ForceGenerator;
 
 enum ShapeRS {
 	BOX_RS,
@@ -30,6 +33,9 @@ protected:
 	float density = 0.15;
 	double size;
 
+	// Fuerzas
+	std::list<ForceGenerator*> forces;
+
 	// Forma
 	ShapeRS s;
 	physx::PxShape* shape = nullptr;
@@ -45,5 +51,14 @@ public:
 	void setVelocity(Vector3 v);
 	void setPosition(Vector3 p);
 	void setInertia(Vector3 i);
+	inline Vector3 getVelocity() { return rigidbody->getLinearVelocity(); }
+	inline Vector3 getPosition() { return actor->getGlobalPose().p; }
+	inline double getMass() { return rigidbody->getMass(); }
+	void addForce(Vector3 f);
+	void addForceGenerator(ForceGenerator* force);
+
+protected:
+
+	void updateForces(double t);
 };
 

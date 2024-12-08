@@ -1,4 +1,5 @@
 #include "RigidSolid.h"
+#include "ForceGenerator.h"
 
 RigidSolid::RigidSolid(physx::PxPhysics* physics, physx::PxScene* scene, float density, Vector3 materialInfo, Vector3 pos, Vector4 color, float lifeTime, float size, ShapeRS s)
 {
@@ -58,6 +59,8 @@ RigidSolid::~RigidSolid()
 
 void RigidSolid::update(double t)
 {
+	rigidbody->clearForce();
+
 	timer += t;
 }
 
@@ -84,4 +87,21 @@ void RigidSolid::setPosition(Vector3 p)
 void RigidSolid::setInertia(Vector3 i)
 {
 	
+}
+
+void RigidSolid::addForce(Vector3 f)
+{
+	rigidbody->addForce(f);
+}
+
+void RigidSolid::addForceGenerator(ForceGenerator* force)
+{
+	forces.push_back(force);
+}
+
+void RigidSolid::updateForces(double t)
+{
+	for (auto g : forces) {
+		g->update(this, t);
+	}
 }
