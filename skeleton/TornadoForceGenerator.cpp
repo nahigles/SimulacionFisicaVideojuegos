@@ -16,3 +16,14 @@ void TornadoForceGenerator::update(Particle* p, double t)
 		calculateForce(p); // Calcula con clase padre viento
 	}
 }
+
+void TornadoForceGenerator::update(RigidSolid* rs, double t)
+{
+	Vector3 rigidSolidPos = rs->getPosition();
+	if (usingBounding && boundingShape->isInside(rigidSolidPos) || !usingBounding) {
+
+		// Cambio velocidad dependiendo de la posicion del solido
+		velocity = k * Vector3(-(rigidSolidPos.z - centerPos.z), 50 - (rigidSolidPos.y - centerPos.y), rigidSolidPos.x - centerPos.x);
+		calculateForce(rs); // Calcula con clase padre viento
+	}
+}

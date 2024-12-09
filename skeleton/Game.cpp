@@ -147,15 +147,6 @@ void Game::update(double t)
 				++it;
 		}
 
-		//if (rigidSolid != nullptr) {
-
-		//	rigidSolid->update(t);
-		//	if (!rigidSolid->isAlive()) {
-		//		delete rigidSolid;
-		//		rigidSolid = nullptr;
-		//	}
-		//}
-
 		std::list<RigidSolidSystem*>::iterator it2 = rigidSolidSystems.begin();
 		while (it2 != rigidSolidSystems.end()) {
 
@@ -226,7 +217,9 @@ void Game::keyPressed(unsigned char key)
 			pSystem->addForceGenerator(gravityForceGenerator);
 		}
 		else if (_state == RIGID_SOLID) {
-			rigidSolidSystems.push_back(new RigidSolidSystem(gPhysics, gScene, { 0,50,0 }, { 0,0,0 }, 0.5, { 0,0,0 }, { 50,50,50 }, COLOR));
+			RigidSolidSystem* rsS = new RigidSolidSystem(gPhysics, gScene, { 0,50,0 }, { 0,0,0 }, 0.25, { 0,0,0 }, { 10,10,10 }, COLOR, { 1,1,1,1 }, true);
+			rsS->addForceGenerator(tornadoForceGenerator);
+			rigidSolidSystems.push_back(rsS);
 		}
 		break;
 	}

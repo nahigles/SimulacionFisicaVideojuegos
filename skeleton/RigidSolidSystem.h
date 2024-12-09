@@ -45,8 +45,13 @@ protected:
 	{0.0,1.0,1.0,1.0},
 	{1.0,0.0,1.0,1.0} };
 
+	// Solidos Rigidos
 	std::list<RigidSolid*> solidoRigidos;
 
+	// Force Generators
+	std::list<ForceGenerator*> forceGenerators;
+
+	// physx
 	physx::PxPhysics* gPhysics = nullptr;
 	physx::PxScene* gScene = nullptr;
 
@@ -54,6 +59,7 @@ public:
 	RigidSolidSystem(physx::PxPhysics* physics, physx::PxScene* scene, Vector3 pos, Vector3 vel, double timeBetween, Vector3 positionVariation = {0,0,0}, Vector3 velocityVariation = {0,0,0}, RS_Type t = BASIC, Vector4 color = { 1,1,1,1 }, bool direction = false);
 	void update(double t);
 	~RigidSolidSystem();
+	void addForceGenerator(ForceGenerator* fGenerator);
 
 protected:
 	void createRigidSolid();

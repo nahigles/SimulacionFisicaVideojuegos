@@ -49,6 +49,11 @@ RigidSolidSystem::~RigidSolidSystem()
 	solidoRigidos.clear();
 }
 
+void RigidSolidSystem::addForceGenerator(ForceGenerator* fGenerator)
+{
+	forceGenerators.push_back(fGenerator);
+}
+
 void RigidSolidSystem::createRigidSolid()
 {
 	// Distribucion uniforme
@@ -92,6 +97,12 @@ void RigidSolidSystem::createRigidSolid()
 	// RIGID SOLID
 	RigidSolid* rS = new RigidSolid(gPhysics, gScene, 0.15, { 0.5,0.5,0.5 }, newPosition, color, 20, 2);
 	rS->setVelocity(nerwVelocity);
+
+	// Añado generadores de fuerzas a los solidos rigidos
+	for (auto it = forceGenerators.begin(); it != forceGenerators.end(); ++it) {
+		rS->addForceGenerator(*it);
+	}
+
 	solidoRigidos.push_back(rS);
 
 	numElements++;
