@@ -59,7 +59,9 @@ RigidSolid::~RigidSolid()
 
 void RigidSolid::update(double t)
 {
-	rigidbody->clearForce();
+	rigidbody->clearForce(); // Esta bn si cambio de orden esto?
+
+	updateForces(t);
 
 	timer += t;
 }
