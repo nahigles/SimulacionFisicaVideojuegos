@@ -15,7 +15,7 @@ public:
 
     void update(Particle* particle, double t) override;
 
-    virtual void update(RigidSolid* rs, double t) override {};
+    void update(RigidSolid* rs, double t) override;
 
     virtual ~BouyancyForceGenerator();
 };

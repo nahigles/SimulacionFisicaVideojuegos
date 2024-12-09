@@ -6,7 +6,7 @@ public:
 	SpringForceGenerator(double k, double resting_length, Particle* other);
 
 	virtual void update(Particle* particle, double t);
-	virtual void update(RigidSolid* rs, double t) override {};
+	virtual void update(RigidSolid* rs, double t);
 
 	inline void setK(double k) { _k = k; }
 

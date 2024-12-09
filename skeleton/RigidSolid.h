@@ -56,6 +56,8 @@ public:
 	inline double getMass() { return rigidbody->getMass(); }
 	void addForce(Vector3 f);
 	void addForceGenerator(ForceGenerator* force);
+	inline double getHeight() { return size * 2; } // Alto
+	inline double getVolume() { return size * 2 * size * 2 * size * 2; } // Ancho * Largo * Alto (En este caso es un cubo asiq son iguales)
 
 protected:
 

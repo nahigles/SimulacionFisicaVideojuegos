@@ -15,7 +15,7 @@ protected:
 public:
 	BlastForceGenerator(float intensity, float blastRadio, Vector3 center, float r = 0, bool visible = true);
 	virtual void update(Particle* p, double t);
-	virtual void update(RigidSolid* rs, double t) override {};
+	virtual void update(RigidSolid* rs, double t);
 	void activateBlast();
 };
 

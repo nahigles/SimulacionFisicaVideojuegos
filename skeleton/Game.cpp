@@ -305,7 +305,7 @@ void Game::keyPressed(unsigned char key)
 	{
 		if (_state == FORCES) {
 
-			// Creo cfigurao de particulas
+			// Creo figura de particulas
 			// Añado generador de fuerzas de explosion
 			this->createCircleOfParticles({ 0.0f,50.0f,0.0f });
 		}

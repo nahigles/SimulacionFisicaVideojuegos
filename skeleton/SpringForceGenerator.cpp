@@ -14,3 +14,8 @@ void SpringForceGenerator::update(Particle* particle, double t) {
 	particle->addForce(force);
 }
 
+void SpringForceGenerator::update(RigidSolid* rs, double t)
+{
+	// Hacerlo con solido rigidos!!
+}
+

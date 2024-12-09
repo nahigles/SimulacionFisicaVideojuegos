@@ -16,7 +16,7 @@ void BlastForceGenerator::update(Particle* p, double t)
 		if (usingBounding && boundingShape->isInside(particlePos) || !usingBounding) {
 
 			time += t;
-			Vector3 particlePos = p->getPos();
+			//Vector3 particlePos = p->getPos();
 			Vector3 distV = particlePos - centerPos;
 			float dist = distV.magnitude();
 			if (dist <= radio) {
@@ -24,6 +24,24 @@ void BlastForceGenerator::update(Particle* p, double t)
 				p->addForce(force);
 			}
 
+		}
+	}
+}
+
+void BlastForceGenerator::update(RigidSolid* rs, double t)
+{
+	if (active) {
+		Vector3 rigidSolidPos = rs->getPosition();
+		if (usingBounding && boundingShape->isInside(rigidSolidPos) || !usingBounding) {
+
+			time += t;
+			//Vector3 rigidSolidPos = rs->getPosition();
+			Vector3 distV = rigidSolidPos - centerPos;
+			float dist = distV.magnitude();
+			if (dist <= radio) {
+				force = k * distV / pow(dist, 2) * exp(-time / timeConst);
+				rs->addForce(force);
+			}
 		}
 	}
 }
