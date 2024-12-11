@@ -189,6 +189,10 @@ void Game::keyPressed(unsigned char key)
 			particleSystems.push_back(pSystem);
 			pSystem->addForceGenerator(gravityForceGenerator);
 		}
+		else if (_state == RIGID_SOLID) {
+			RigidSolidSystem* rsS = new RigidSolidSystem(gPhysics, gScene, { 0,50,0 }, { 0,0,0 }, 0.25, { 10,0,10 }, { 10,10,10 }, BASIC, {0,1,0,1});
+			rigidSolidSystems.push_back(rsS);
+		}
 
 		break;
 	}
@@ -201,7 +205,7 @@ void Game::keyPressed(unsigned char key)
 		}
 		// SOLIDO RIGIDO
 		else if (_state == RIGID_SOLID) {
-			RigidSolid* rs = new RigidSolid(gPhysics, gScene, 0.20, { 1,1,-1 }, { 0.0,50.0,0.0 }, { 1.0, 1.0, 1.0, 1.0 }, 5, 2, BOX_RS);
+			RigidSolid* rs = new RigidSolid(gPhysics, gScene, 15, { 1,1,-1 }, { 0.0,50.0,0.0 }, { 1.0, 1.0, 1.0, 1.0 }, 5, 2, BOX_RS);
 			rs->addForceGenerator(gravityForceGenerator2);                                
 			rigidSolids.push_back(rs);
 

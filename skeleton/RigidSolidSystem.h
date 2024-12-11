@@ -17,6 +17,7 @@ class RigidSolidSystem
 
 protected:
 	const int maxNumElements = 100;
+	const int maxMass = 15;
 	int numElements;
 
 	Vector3 initialPos;

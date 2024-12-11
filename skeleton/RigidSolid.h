@@ -44,7 +44,7 @@ protected:
 	physx::PxRigidBody* rigidbody = nullptr;
 
 public:
-	RigidSolid(physx::PxPhysics* physics, physx::PxScene* scene, float density, Vector3 materialInfo = Vector3(-1, -1, -1), Vector3 pos = { 1.0f, 1.0f,1.0f }, Vector4 color = { 1.0f, 1.0f,1.0f,1.0f },float lifeTime = 30.0f, float size = 1, ShapeRS s = ShapeRS::SPHERE_RS);
+	RigidSolid(physx::PxPhysics* physics, physx::PxScene* scene, float m, Vector3 materialInfo = Vector3(-1, -1, -1), Vector3 pos = { 1.0f, 1.0f,1.0f }, Vector4 color = { 1.0f, 1.0f,1.0f,1.0f },float lifeTime = 30.0f, float size = 1, ShapeRS s = ShapeRS::SPHERE_RS);
 	~RigidSolid();
 	void update(double t);
 	bool isAlive();
@@ -58,6 +58,7 @@ public:
 	void addForceGenerator(ForceGenerator* force);
 	inline double getHeight() { return size * 2; } // Alto
 	inline double getVolume() { return size * 2 * size * 2 * size * 2; } // Ancho * Largo * Alto (En este caso es un cubo asiq son iguales)
+	void setMass(float m);
 
 protected:
 

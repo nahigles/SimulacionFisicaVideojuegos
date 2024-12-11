@@ -1,7 +1,7 @@
 #include "RigidSolid.h"
 #include "ForceGenerator.h"
 
-RigidSolid::RigidSolid(physx::PxPhysics* physics, physx::PxScene* scene, float density, Vector3 materialInfo, Vector3 pos, Vector4 color, float lifeTime, float size, ShapeRS s)
+RigidSolid::RigidSolid(physx::PxPhysics* physics, physx::PxScene* scene, float m, Vector3 materialInfo, Vector3 pos, Vector4 color, float lifeTime, float size, ShapeRS s)
 {
 	// Fisikas
 	gPhysics = physics;
@@ -13,8 +13,9 @@ RigidSolid::RigidSolid(physx::PxPhysics* physics, physx::PxScene* scene, float d
 	this->acel = acel;
 	this->forceAcum = acel;
 
+	masa = m;
 	this->size = size;
-	this->density = density;
+	this->density = masa/getVolume(); // Formula densidad d = m/v
 	alive = true;
 	this->lifeTime = lifeTime;
 
@@ -36,24 +37,25 @@ RigidSolid::RigidSolid(physx::PxPhysics* physics, physx::PxScene* scene, float d
 	}
 
 	rigidbody = physics->createRigidDynamic(pose);
-	masa = rigidbody->getMass();
-
-	// Distribucion de masas y momentos de inercia
-	//if (s == SPHERE_RS)
-		PxRigidBodyExt::updateMassAndInertia(*rigidbody, density);
-	//else if (s == BOX_RS) {
-	//	float iH = 1 / 12 * masa * (size * size + size * size); // Alto
-	//	float iW = 1 / 12 * masa * (size * size + size * size); // Ancho
-	//	float iD = 1 / 12 * masa * (size * size + size * size); // Profundo
-
-	//	rigidbody->setMassSpaceInertiaTensor({iH,iW,iD});
-	//}
+	rigidbody->setMass(masa);
 
 
 	actor = rigidbody;
 	gScene->addActor(*rigidbody);
 	rigidbody->attachShape(*shape);
 	renderItem = new RenderItem(shape, rigidbody, color);
+
+	// Distribucion de masas y momentos de inercia
+//	if (s == SPHERE_RS)
+		PxRigidBodyExt::updateMassAndInertia(*rigidbody, density);
+	//else if (s == BOX_RS) {
+	//	float iH = (1 / 12) * masa * (size * size + size * size); // Alto
+	//	float iW = (1 / 12) * masa * (size * size + size * size); // Ancho
+	//	float iD = (1 / 12) * masa * (size * size + size * size); // Profundo
+	//	rigidbody->setMassSpaceInertiaTensor({iH,iW,iD});
+	//}
+
+	masa = rigidbody->getMass();
 }
 
 RigidSolid::~RigidSolid()
@@ -106,6 +108,13 @@ void RigidSolid::addForce(Vector3 f)
 void RigidSolid::addForceGenerator(ForceGenerator* force)
 {
 	forces.push_back(force);
+}
+
+void RigidSolid::setMass(float m)
+{
+	masa = m;
+	density = masa / (getVolume());;
+	physx::PxRigidBodyExt::updateMassAndInertia(*rigidbody, physx::PxReal(density)); // (Densidad)
 }
 
 void RigidSolid::updateForces(double t)

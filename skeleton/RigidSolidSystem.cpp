@@ -67,6 +67,8 @@ void RigidSolidSystem::createRigidSolid()
 	else
 		aux = -randomPos;
 
+	// Masa aleatoria
+	std::uniform_int_distribution<> distrMass(1, maxMass);
 
 	// Random position distribution
 	std::uniform_int_distribution<> distrPosX(aux.x, randomPos.x);
@@ -95,7 +97,7 @@ void RigidSolidSystem::createRigidSolid()
 
 
 	// RIGID SOLID
-	RigidSolid* rS = new RigidSolid(gPhysics, gScene, 0.15, { 0.5,0.5,0.5 }, newPosition, color, 20, 2);
+	RigidSolid* rS = new RigidSolid(gPhysics, gScene, distrMass(gen), {0.5,0.5,0.5}, newPosition, color, 20, 2);
 	rS->setVelocity(nerwVelocity);
 
 	// Añado generadores de fuerzas a los solidos rigidos
