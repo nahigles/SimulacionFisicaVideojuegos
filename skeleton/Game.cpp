@@ -68,7 +68,7 @@ void Game::update(double t)
 			gravityForceGenerator3 = new GravityForceGenerator(15.0f, { 0.0f, 60.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, 30);
 			windForceGenerator = new WindForceGenerator({ 0.0f, 60.0f, 0.0f }, 0.99/*, 0, { 5.0f, 30.0f, 5.0f }, { 0.0f, 0.0f, 0.0f }, 30*/);
 			tornadoForceGenerator = new TornadoForceGenerator(0.99, 50, { 5.0f, 30.0f, 5.0f }/*, 35*/);
-			blastForceGenerator = new BlastForceGenerator(500, 60, { 0.0f,50.0f,0.0f });
+			blastForceGenerator = new BlastForceGenerator(50000, 60, { 0.0f,50.0f,0.0f });
 
 			break;
 		}
@@ -179,6 +179,12 @@ void Game::keyPressed(unsigned char key)
 			particleSystems.push_back(pSystem);
 			pSystem->addForceGenerator(gravityForceGenerator);
 		}
+		// Explosion
+		else if (_state == RIGID_SOLID) {
+			RigidSolidSystem* rsS = new RigidSolidSystem(gPhysics, gScene, { 0,50,0 }, { 0,0,0 }, 0.25, { 10,0,10 }, { 10,10,10 }, BASIC, { 1,0,0,1 });
+			rsS->addForceGenerator(blastForceGenerator);
+			rigidSolidSystems.push_back(rsS);
+		}
 		break;
 	}
 	case 'T': {
@@ -220,8 +226,9 @@ void Game::keyPressed(unsigned char key)
 			particleSystems.push_back(pSystem);
 			pSystem->addForceGenerator(gravityForceGenerator);
 		}
+		// Tornado
 		else if (_state == RIGID_SOLID) {
-			RigidSolidSystem* rsS = new RigidSolidSystem(gPhysics, gScene, { 0,50,0 }, { 0,0,0 }, 0.25, { 0,0,0 }, { 10,10,10 }, COLOR, { 1,1,1,1 }, true);
+			RigidSolidSystem* rsS = new RigidSolidSystem(gPhysics, gScene, { 0,50,0 }, { 0,0,0 }, 0.1, { 0,0,0 }, { 10,10,10 }, COLOR, { 1,1,1,1 }, true);
 			rsS->addForceGenerator(tornadoForceGenerator);
 			rigidSolidSystems.push_back(rsS);
 		}
@@ -234,6 +241,12 @@ void Game::keyPressed(unsigned char key)
 			ParticleSystem* pSystem = new ParticleSystem({ 0.0,50.0,0.0 }, { 10.0, 10.0, 0.0 }, { 0.0, 10.0, 0.0 }, 3, { 1.0, 1.0, 1.0, 1.0 }, 9.0, 0.05, 5, 15, COLOURFULL);
 			particleSystems.push_back(pSystem);
 			pSystem->addForceGenerator(gravityForceGenerator);
+		}
+		// Viento
+		else if (_state == RIGID_SOLID) {
+			RigidSolidSystem* rsS = new RigidSolidSystem(gPhysics, gScene, { 0,50,0 }, { 0,0,0 }, 0.05, { 0,0,0 }, { 10,10,10 }, COLOR, { 1,1,1,1 }, true);
+			rsS->addForceGenerator(windForceGenerator);
+			rigidSolidSystems.push_back(rsS);
 		}
 		break;
 	}
@@ -321,6 +334,9 @@ void Game::keyPressed(unsigned char key)
 
 			Particle* p = new Particle({ 0.0f,50.0f,0.0f }, { 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, 0.98, { 0.0,0.0,0.0,1.0 }, 0.2, 2);
 			particulas.push_back(p);
+			blastForceGenerator->activateBlast();
+		}
+		else if (_state == RIGID_SOLID) {
 			blastForceGenerator->activateBlast();
 		}
 		break;
