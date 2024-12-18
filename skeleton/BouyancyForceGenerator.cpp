@@ -1,7 +1,7 @@
 #include "BouyancyForceGenerator.h"
 
 BouyancyForceGenerator::BouyancyForceGenerator(float h, float d) : ForceGenerator(), _liquid_density(d) {
-    _liquid_particle = new Particle({ 70,0,0 }, { 0,0,0 }, { 0,0,0 }, 0.60, { 0.0,0.3,1.0, 1 }, 10, 1, CUBO);
+    _liquid_particle = new Particle({ 0,20,0 }, { 0,0,0 }, { 0,0,0 }, 0.60, { 0.0,0.3,1.0, 1 }, 10, 1, CUBO);
 }
 
 void BouyancyForceGenerator::update(Particle* particle, double t)

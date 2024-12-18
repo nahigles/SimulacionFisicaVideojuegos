@@ -19,8 +19,17 @@ void Game::nextState()
 	_nextState = (State)((_nextState + 1) % LAST_STATE);
 }
 
+void Game::previousState()
+{
+	if (_nextState == START)
+		_nextState = LAST_STATE;
+
+	_nextState = (State)((_nextState - 1));
+}
+
 void Game::update(double t)
 {
+	// Se hace al cambiar de estado
 	if (_state != _nextState) {
 		_state = _nextState;
 
@@ -30,8 +39,25 @@ void Game::update(double t)
 			std::cout << "Start State" << endl;
 
 			// Gravedad
-			gravityForceGenerator = new GravityForceGenerator(10.0f);
-			gravityForceGenerator2 = new GravityForceGenerator(-10.0f);
+			if (gravityForceGenerator == nullptr)
+				gravityForceGenerator = new GravityForceGenerator(10.0f);
+			if (gravityForceGenerator2 == nullptr)
+				gravityForceGenerator2 = new GravityForceGenerator(-10.0f);
+			break;
+		}
+		case E_FLOTACION: {
+			std::cout << "Flotacion State" << endl;
+			deleteAll();
+			deleteSpecificForces();
+			experimentoFlotacionInit();
+
+			break;
+		}
+		case E_COLUMNA_AIRE: {
+			std::cout << "Columna de aire State" << endl;
+			deleteAll();
+			deleteSpecificForces();
+			experimentoColumnaAireInit();
 			break;
 		}
 		case GAME: {
@@ -91,70 +117,20 @@ void Game::update(double t)
 		}
 	}
 
+	// Se hace todo el rato
 	switch (_state)
 	{
 	case START:
 		break;
-
+	case E_FLOTACION:
+	case E_COLUMNA_AIRE:
 	case FORCES:
-	case GAME: {
-
-		std::list<Particle*>::iterator itP = particulas.begin();
-		while (itP != particulas.end()) {
-
-			(*itP)->update(t);
-			if (!(*itP)->isAlive()) {
-				delete (*itP);
-				itP = particulas.erase(itP);
-			}
-			else
-				++itP;
-		}
-
-		std::list<Projectile*>::iterator it = projectiles.begin();
-		while (it != projectiles.end()) {
-
-			(*it)->update(t);
-			if (!(*it)->isAlive()) {
-				delete (*it);
-				it = projectiles.erase(it);
-			}
-			else
-				++it;
-		}
-
-		// Sistema de particulas
-		std::list<ParticleSystem*>::iterator it2 = particleSystems.begin();
-		while (it2 != particleSystems.end()) {
-
-			(*it2)->update(t);
-			++it2;
-		}
-
+	case GAME:
+	case RIGID_SOLID:
+		if (!_pause)
+			updateElements(t);
 		break;
-	}
-	case RIGID_SOLID: {
 
-		std::list<RigidSolid*>::iterator it = rigidSolids.begin();
-		while (it != rigidSolids.end()) {
-
-			(*it)->update(t);
-			if (!(*it)->isAlive()) {
-				delete (*it);
-				it = rigidSolids.erase(it);
-			}
-			else
-				++it;
-		}
-
-		std::list<RigidSolidSystem*>::iterator it2 = rigidSolidSystems.begin();
-		while (it2 != rigidSolidSystems.end()) {
-
-			(*it2)->update(t);
-			++it2;
-		}
-		break;
-	}
 	case END: {
 
 		break;
@@ -196,7 +172,7 @@ void Game::keyPressed(unsigned char key)
 			pSystem->addForceGenerator(gravityForceGenerator);
 		}
 		else if (_state == RIGID_SOLID) {
-			RigidSolidSystem* rsS = new RigidSolidSystem(gPhysics, gScene, { 0,50,0 }, { 0,0,0 }, 0.25, { 10,0,10 }, { 10,10,10 }, BASIC, {0,1,0,1});
+			RigidSolidSystem* rsS = new RigidSolidSystem(gPhysics, gScene, { 0,50,0 }, { 0,0,0 }, 0.25, { 10,0,10 }, { 10,10,10 }, BASIC, { 0,1,0,1 });
 			rigidSolidSystems.push_back(rsS);
 		}
 
@@ -212,7 +188,7 @@ void Game::keyPressed(unsigned char key)
 		// SOLIDO RIGIDO
 		else if (_state == RIGID_SOLID) {
 			RigidSolid* rs = new RigidSolid(gPhysics, gScene, 15, { 1,1,-1 }, { 0.0,50.0,0.0 }, { 1.0, 1.0, 1.0, 1.0 }, 5, 2, BOX_RS);
-			rs->addForceGenerator(gravityForceGenerator2);                                
+			rs->addForceGenerator(gravityForceGenerator2);
 			rigidSolids.push_back(rs);
 
 		}
@@ -399,6 +375,8 @@ void Game::keyPressed(unsigned char key)
 	}
 	case 'P':
 	{
+		_pause = !_pause;
+
 		if (_state == GAME) {
 			// Practica 1.2 [PROYECTILES]
 			// Bola
@@ -478,6 +456,21 @@ void Game::deleteAll()
 		zRenderItem = nullptr;
 	}
 
+	if (baseRenderItem != nullptr) {
+		DeregisterRenderItem(baseRenderItem);
+		baseRenderItem = nullptr;
+	}
+
+	if (tapaRenderItem != nullptr) {
+		DeregisterRenderItem(tapaRenderItem);
+		tapaRenderItem = nullptr;
+	}
+
+	if (aireRenderItem != nullptr) {
+		DeregisterRenderItem(aireRenderItem);
+		aireRenderItem = nullptr;
+	}
+
 	for (std::list<Projectile*>::iterator it = projectiles.begin(); it != projectiles.end();) {
 		delete (*it);
 		it = projectiles.erase(it);
@@ -520,9 +513,20 @@ void Game::deleteForces()
 		gravityForceGenerator3 = nullptr;
 	}
 
+
+	deleteSpecificForces();
+}
+
+void Game::deleteSpecificForces()
+{
 	if (windForceGenerator != nullptr) {
 		delete windForceGenerator;
 		windForceGenerator = nullptr;
+	}
+
+	if (windForceGeneratorPelota != nullptr) {
+		delete windForceGeneratorPelota;
+		windForceGeneratorPelota = nullptr;
 	}
 
 	if (tornadoForceGenerator != nullptr) {
@@ -555,7 +559,6 @@ void Game::deleteForces()
 		bouyancyForceGenerator = nullptr;
 	}
 
-
 }
 
 void Game::createCircleOfParticles(Vector3 centerPosition)
@@ -579,4 +582,133 @@ void Game::createCircleOfParticles(Vector3 centerPosition)
 
 		masa++;
 	}
+}
+
+void Game::updateElements(double t)
+{
+	// Particulas
+	std::list<Particle*>::iterator itP = particulas.begin();
+	while (itP != particulas.end()) {
+
+		(*itP)->update(t);
+		if (!(*itP)->isAlive()) {
+			delete (*itP);
+			itP = particulas.erase(itP);
+		}
+		else
+			++itP;
+	}
+
+	// Proyectiles
+	std::list<Projectile*>::iterator it = projectiles.begin();
+	while (it != projectiles.end()) {
+
+		(*it)->update(t);
+		if (!(*it)->isAlive()) {
+			delete (*it);
+			it = projectiles.erase(it);
+		}
+		else
+			++it;
+	}
+
+	// Sistema de particulas
+	std::list<ParticleSystem*>::iterator it2 = particleSystems.begin();
+	while (it2 != particleSystems.end()) {
+
+		(*it2)->update(t);
+		++it2;
+	}
+
+	// Update Rigid Solids
+	std::list<RigidSolid*>::iterator itS = rigidSolids.begin();
+	while (itS != rigidSolids.end()) {
+
+		(*itS)->update(t);
+		if (!(*itS)->isAlive()) {
+			delete (*itS);
+			itS = rigidSolids.erase(itS);
+		}
+		else
+			++itS;
+	}
+
+	std::list<RigidSolidSystem*>::iterator itS2 = rigidSolidSystems.begin();
+	while (itS2 != rigidSolidSystems.end()) {
+
+		(*itS2)->update(t);
+		++itS2;
+	}
+}
+
+void Game::experimentoColumnaAireInit()
+{
+	// Maquina de aire
+	// Vectores con posicion
+	Vector3D baseVector = Vector3D(0, 25.5, 0);
+	Vector3D tapaVector = Vector3D(0, 14, 0);
+	Vector3D aireVector = Vector3D(0, 20, 0);
+
+	// Transform
+	base = PxTransform(baseVector.x(), baseVector.y(), baseVector.z());
+	tapa = PxTransform(tapaVector.x(), tapaVector.y(), tapaVector.z());
+	aire = PxTransform(aireVector.x(), aireVector.y(), aireVector.z());
+
+	// Cubo base
+	baseRenderItem = new RenderItem(CreateShape(PxBoxGeometry(3.0f, 0.5, 3)), &base, { 0.0, 0.0, 0.0, 1.0 });
+
+	// Cubo tapa
+	tapaRenderItem = new RenderItem(CreateShape(PxBoxGeometry(5.0f, 1, 5)), &tapa, { 0.0, 0.0, 0.0, 1.0 });
+
+	// Cubo amarillo
+	aireRenderItem = new RenderItem(CreateShape(PxBoxGeometry(5.0f, 5, 5)), &aire, { 1.0f, 1.0f, 0.22f, 1.0 });
+
+
+	// Pelota de playa
+	pelota = new Particle({ 0,30,0 }, { 0,0,0 }, { 0,0,0 }, 0.98, { 1.0f, 0.5f, 0.22f, 1.0f }, 5, 1);
+
+	// Fuerza viento
+	windForceGeneratorPelota = new WindForceGenerator({ 0.0f, 30.0f, 0.0f }, 0.99, 0, { 5.0f, 30.0f, 5.0f }, { 0.0f, 0.0f, 0.0f }, 30);
+	pelota->addForceGenerator(windForceGeneratorPelota);
+	pelota->addForceGenerator(gravityForceGenerator); // gravedad
+	particulas.push_back(pelota);
+
+}
+
+void Game::experimentoFlotacionInit()
+{
+	// Vectores con posicion
+	Vector3D baseVector = Vector3D(0, 60, 0);
+	Vector3D tapaVector = Vector3D(0, 14, 0);
+
+	// Transform
+	base = PxTransform(baseVector.x(), baseVector.y(), baseVector.z());
+	tapa = PxTransform(tapaVector.x(), tapaVector.y(), tapaVector.z());
+
+	// Cubo base
+	baseRenderItem = new RenderItem(CreateShape(PxBoxGeometry(5.0f, 1, 5)), &base, { 0.0, 0.0, 0.0, 1.0 });
+
+	// Cubo tapa
+	tapaRenderItem = new RenderItem(CreateShape(PxBoxGeometry(5.0f, 1, 5)), &tapa, { 0.0, 0.0, 0.0, 1.0 });
+
+
+	// FLOTACION
+	float y = 25.0;
+	Particle* p4 = new Particle({ 0,y,0 }, { 0,0,0 }, { 0,0,0 }, 0.98, { 0.87, 0.3, 0.22, 1.0 }, 3, 30, CUBO);
+
+	// fuerzas
+	bouyancyForceGenerator = new BouyancyForceGenerator(y, 1000);
+	p4->addForceGenerator(bouyancyForceGenerator);
+	p4->addForceGenerator(gravityForceGenerator);
+
+	particulas.push_back(p4);
+
+
+	// Sistema de particulas burbujas
+	ParticleSystem* pSystem = new ParticleSystem({ 0.0,24.0,0.0 }, { 0.0, 0.0, 0.0 }, { 0.0, 0.0, 0.0 }, 0.7, { 0.7, 0.7, 1.0, 0.0 }, 4, 0.2, 3, 1, SNOW);
+	particleSystems.push_back(pSystem);
+
+	// Force Generator de viento
+	windForceGenerator = new WindForceGenerator({ 0.0f, 20.0f, 0.0f }, 0.99/*, 0, { 5.0f, 30.0f, 5.0f }, { 0.0f, 0.0f, 0.0f }, 30*/);
+	pSystem->addForceGenerator(windForceGenerator);
 }

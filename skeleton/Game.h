@@ -20,7 +20,10 @@ using namespace std;
 
 enum State
 {
-	START = 0,
+	START,
+	E_FLOTACION,
+	E_COLUMNA_AIRE,
+	E_EXPLOSION_MOTOR,
 	GAME,
 	FORCES,
 	RIGID_SOLID,
@@ -39,9 +42,15 @@ protected:
 	State _state;
 	State _nextState;
 
+	bool _pause = false;
+
 	RenderItem* xRenderItem = NULL, * yRenderItem = NULL, * zRenderItem = NULL, * originRenderItem = NULL;
 	PxTransform x, y, z, origin;
 
+	Particle* pelota = nullptr; // Experimento pelota de aire
+
+	RenderItem* baseRenderItem = NULL, * tapaRenderItem = NULL, * aireRenderItem = NULL;
+	PxTransform base, tapa, aire;
 
 	list<Particle*> particulas; // Particulas
 
@@ -61,6 +70,7 @@ protected:
 
 	// Otras fuerzas
 	WindForceGenerator* windForceGenerator = nullptr;
+	WindForceGenerator* windForceGeneratorPelota = nullptr;
 	TornadoForceGenerator* tornadoForceGenerator = nullptr;
 	BlastForceGenerator* blastForceGenerator = nullptr;
 	SpringForceGenerator* springForceGenerator1 = nullptr;
@@ -72,6 +82,7 @@ protected:
 public:
 	Game(physx::PxPhysics* physics, physx::PxScene* scene);
 	void nextState();
+	void previousState();
 	void update(double t);
 	void keyPressed(unsigned char key);
 	~Game();
@@ -79,6 +90,10 @@ public:
 protected:
 	void deleteAll();
 	void deleteForces();
+	void deleteSpecificForces();
 	void createCircleOfParticles(Vector3 centerPosition);
+	void updateElements(double t);
+	void experimentoColumnaAireInit();
+	void experimentoFlotacionInit();
 };
 
