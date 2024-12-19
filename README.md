@@ -13,12 +13,12 @@ Más allá de lo visible es un proyecto que simula experimentos de un museo de c
 El nombre del proyecto viene de las fuerzas físicas que no puedes ver pero que siempre están ahí, y de la posibilidad de interactuar con estos experimentos y no solo verlos.
 
 ## Controles
-N → Cambiar al siguiente experimento 
-B → Cambiar al experimento anterior
-P → Pausar y despausar
-F → Cambiar gravedad en la pantalla de inicio
-X → Activar explosión en el Experimento 6 (Cilindro motor)
-C → Reiniciar Experimento 6 (Cilindro motor)
-Y → Lanzar proyectil tipo 1
-U → Lanzar proyectil tipo 2
-I → Lanzar proyectil tipo 3
+- N → Cambiar al siguiente experimento 
+- B → Cambiar al experimento anterior
+- P → Pausar y despausar
+- F → Cambiar gravedad en la pantalla de inicio
+- X → Activar explosión en el Experimento 6 (Cilindro motor)
+- C → Reiniciar Experimento 6 (Cilindro motor)
+- Y → Lanzar proyectil tipo 1
+- U → Lanzar proyectil tipo 2
+- I → Lanzar proyectil tipo 3
