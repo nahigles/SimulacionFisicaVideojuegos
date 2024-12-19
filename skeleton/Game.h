@@ -25,9 +25,7 @@ enum State
 	E_COLUMNA_AIRE,
 	E_BOLAS_LOKAS,
 	E_EXPLOSION_MOTOR,
-	GAME,
-	FORCES,
-	RIGID_SOLID,
+	E_QUIMICA,
 	END,
 	LAST_STATE
 
@@ -99,13 +97,29 @@ public:
 	~Game();
 
 protected:
-	void deleteAll();
-	void deleteForces();
-	void deleteSpecificForces();
 	void createCircleOfParticles(Vector3 centerPosition);
 	void updateElements(double t);
+
+	// Start y End
+	void startInit();
+	void endInit();
+
+	// Experimentos
 	void experimentoColumnaAireInit();
 	void experimentoFlotacionInit();
 	void experimentoBolasLokasInit();
+	void experimentoExplosionMotorInit();
+	void experimentoQuimicaInit();
+
+	// Proyectiles
+	void lanzaProyectiles();
+	void proyectilBala();
+	void proyectilNieve();
+	void proyectilBola();
+
+	// Elimina
+	void deleteAll();
+	void deleteForces();
+	void deleteSpecificForces();
 };
 
