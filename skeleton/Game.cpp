@@ -60,6 +60,20 @@ void Game::update(double t)
 			experimentoColumnaAireInit();
 			break;
 		}
+		case E_BOLAS_LOKAS: {
+			std::cout << "Bolas lokas State" << endl;
+			deleteAll();
+			deleteSpecificForces();
+			experimentoBolasLokasInit();
+			break;
+		}
+		case E_EXPLOSION_MOTOR:
+		{
+			std::cout << "Motor State" << endl;
+			deleteAll();
+			deleteSpecificForces();
+			break;
+		}
 		case GAME: {
 			std::cout << "Game State" << endl;
 
@@ -124,6 +138,7 @@ void Game::update(double t)
 		break;
 	case E_FLOTACION:
 	case E_COLUMNA_AIRE:
+	case E_BOLAS_LOKAS:
 	case FORCES:
 	case GAME:
 	case RIGID_SOLID:
@@ -157,7 +172,7 @@ void Game::keyPressed(unsigned char key)
 		}
 		// Explosion
 		else if (_state == RIGID_SOLID) {
-			RigidSolidSystem* rsS = new RigidSolidSystem(gPhysics, gScene, { 0,50,0 }, { 0,0,0 }, 0.25, { 10,0,10 }, { 10,10,10 }, BASIC, { 1,0,0,1 });
+			RigidSolidSystem* rsS = new RigidSolidSystem(gPhysics, gScene, { 0,50,0 }, { 0,0,0 }, 0.25, { 10,0,10 }, { 10,10,10 }, 2, BASIC, { 1,0,0,1 });
 			rsS->addForceGenerator(blastForceGenerator);
 			rigidSolidSystems.push_back(rsS);
 		}
@@ -172,7 +187,7 @@ void Game::keyPressed(unsigned char key)
 			pSystem->addForceGenerator(gravityForceGenerator);
 		}
 		else if (_state == RIGID_SOLID) {
-			RigidSolidSystem* rsS = new RigidSolidSystem(gPhysics, gScene, { 0,50,0 }, { 0,0,0 }, 0.25, { 10,0,10 }, { 10,10,10 }, BASIC, { 0,1,0,1 });
+			RigidSolidSystem* rsS = new RigidSolidSystem(gPhysics, gScene, { 0,50,0 }, { 0,0,0 }, 0.25, { 10,0,10 }, { 10,10,10 },2, BASIC, { 0,1,0,1 });
 			rigidSolidSystems.push_back(rsS);
 		}
 
@@ -204,7 +219,7 @@ void Game::keyPressed(unsigned char key)
 		}
 		// Tornado
 		else if (_state == RIGID_SOLID) {
-			RigidSolidSystem* rsS = new RigidSolidSystem(gPhysics, gScene, { 0,50,0 }, { 0,0,0 }, 0.1, { 0,0,0 }, { 10,10,10 }, COLOR, { 1,1,1,1 }, true);
+			RigidSolidSystem* rsS = new RigidSolidSystem(gPhysics, gScene, { 0,50,0 }, { 0,0,0 }, 0.1, { 0,0,0 }, { 10,10,10 },2, COLOR, { 1,1,1,1 }, true);
 			rsS->addForceGenerator(tornadoForceGenerator);
 			rigidSolidSystems.push_back(rsS);
 		}
@@ -220,7 +235,7 @@ void Game::keyPressed(unsigned char key)
 		}
 		// Viento
 		else if (_state == RIGID_SOLID) {
-			RigidSolidSystem* rsS = new RigidSolidSystem(gPhysics, gScene, { 0,50,0 }, { 0,0,0 }, 0.05, { 0,0,0 }, { 10,10,10 }, COLOR, { 1,1,1,1 }, true);
+			RigidSolidSystem* rsS = new RigidSolidSystem(gPhysics, gScene, { 0,50,0 }, { 0,0,0 }, 0.05, { 0,0,0 }, { 10,10,10 },2, COLOR, { 1,1,1,1 }, true);
 			rsS->addForceGenerator(windForceGenerator);
 			rigidSolidSystems.push_back(rsS);
 		}
@@ -495,6 +510,11 @@ void Game::deleteAll()
 		delete (*it);
 		it = rigidSolidSystems.erase(it);
 	}
+
+	// Borro suelo // EL SUELO SE ELIMINA SOLO?
+	//suelo->release(); 
+	//sueloShape->release();
+	//sueloRenderItem->release();
 }
 
 void Game::deleteForces()
@@ -527,6 +547,26 @@ void Game::deleteSpecificForces()
 	if (windForceGeneratorPelota != nullptr) {
 		delete windForceGeneratorPelota;
 		windForceGeneratorPelota = nullptr;
+	}
+
+	if (windForceGeneratorBolas1 != nullptr) {
+		delete windForceGeneratorBolas1;
+		windForceGeneratorBolas1 = nullptr;
+	}
+
+	if (windForceGeneratorBolas2 != nullptr) {
+		delete windForceGeneratorBolas2;
+		windForceGeneratorBolas2 = nullptr;
+	}
+
+	if (windForceGeneratorBolas3 != nullptr) {
+		delete windForceGeneratorBolas3;
+		windForceGeneratorBolas3 = nullptr;
+	}
+
+	if (windForceGeneratorBolas4 != nullptr) {
+		delete windForceGeneratorBolas4;
+		windForceGeneratorBolas4 = nullptr;
 	}
 
 	if (tornadoForceGenerator != nullptr) {
@@ -709,6 +749,55 @@ void Game::experimentoFlotacionInit()
 	particleSystems.push_back(pSystem);
 
 	// Force Generator de viento
-	windForceGenerator = new WindForceGenerator({ 0.0f, 20.0f, 0.0f }, 0.99/*, 0, { 5.0f, 30.0f, 5.0f }, { 0.0f, 0.0f, 0.0f }, 30*/);
+	windForceGenerator = new WindForceGenerator({ 0.0f, 20.0f, 0.0f }, 0.99);
 	pSystem->addForceGenerator(windForceGenerator);
+}
+
+void Game::experimentoBolasLokasInit()
+{
+	// Creo suelo
+	baseEstatica = gPhysics->createRigidStatic(PxTransform({ 0,20,0 }));
+	baseEstaticaShape = CreateShape(PxBoxGeometry(30, 5, 30));
+	baseEstatica->attachShape(*baseEstaticaShape);
+	gScene->addActor(*baseEstatica);
+	baseEstaticaRenderItem = new RenderItem(baseEstaticaShape, baseEstatica, { 0,1,0.3,1 });
+
+	RigidSolidSystem* sistmaSolidoRigidos = new RigidSolidSystem(gPhysics, gScene, { 25,25,0 }, { 0,0,0 }, 0.3, { 0,0,10 }, { 0,0,4 }, 0.5);
+	RigidSolidSystem* sistmaSolidoRigidos2 = new RigidSolidSystem(gPhysics, gScene, { -25,25,0 }, { 0,0,0 }, 0.3, { 0,0,10 }, { 0,0,4 }, 0.5);
+	RigidSolidSystem* sistmaSolidoRigidos3 = new RigidSolidSystem(gPhysics, gScene, { 0,25,25 }, { 0,0,0 }, 0.3, { 10,0,0 }, { 4,0,0 }, 0.5);
+	RigidSolidSystem* sistmaSolidoRigidos4 = new RigidSolidSystem(gPhysics, gScene, { 0,25,-25 }, { 0,0,0 }, 0.3, { 10,0,0 }, { 4,0,0 }, 0.5);
+
+	// Fuerza 1
+	windForceGeneratorBolas1 = new WindForceGenerator({ -1000.0f, 0.0f, 0.0f }, 0.99, 0, { 24.5f, 18.5f, -15.5f }, { 28.5f, 27.0f, 16.5f });
+	sistmaSolidoRigidos->addForceGenerator(windForceGeneratorBolas1);
+	sistmaSolidoRigidos2->addForceGenerator(windForceGeneratorBolas1);
+	sistmaSolidoRigidos3->addForceGenerator(windForceGeneratorBolas1);
+	sistmaSolidoRigidos4->addForceGenerator(windForceGeneratorBolas1);
+
+	// Fuerza 2
+	windForceGeneratorBolas2 = new WindForceGenerator({ 1000.0f, 0.0f, 0.0f }, 0.99, 0, { -28.5f, 18.5f, -15.5f }, { -24.5f, 27.0f, 16.5f });
+	sistmaSolidoRigidos->addForceGenerator(windForceGeneratorBolas2);
+	sistmaSolidoRigidos2->addForceGenerator(windForceGeneratorBolas2);
+	sistmaSolidoRigidos3->addForceGenerator(windForceGeneratorBolas2);
+	sistmaSolidoRigidos4->addForceGenerator(windForceGeneratorBolas2);
+
+	// Fuerza 3
+	windForceGeneratorBolas3 = new WindForceGenerator({ 0.0f, 0.0f, -1000.0f }, 0.99, 0, { -16.f, 18.5f, 24.5f }, { 16.5f, 27.0f, 28.5f });
+	sistmaSolidoRigidos->addForceGenerator(windForceGeneratorBolas3);
+	sistmaSolidoRigidos2->addForceGenerator(windForceGeneratorBolas3);
+	sistmaSolidoRigidos3->addForceGenerator(windForceGeneratorBolas3);
+	sistmaSolidoRigidos4->addForceGenerator(windForceGeneratorBolas3);
+
+	// Fuerza 4
+	windForceGeneratorBolas4 = new WindForceGenerator({ 0.0f, 0.0f, 1000.0f }, 0.99, 0, { -16.f, 18.5f, -28.5f }, { 16.5f, 27.0f, -24.5f });
+	sistmaSolidoRigidos->addForceGenerator(windForceGeneratorBolas4);
+	sistmaSolidoRigidos2->addForceGenerator(windForceGeneratorBolas4);
+	sistmaSolidoRigidos3->addForceGenerator(windForceGeneratorBolas4);
+	sistmaSolidoRigidos4->addForceGenerator(windForceGeneratorBolas4);
+
+	// Anado a vector de sistemas de solidos
+	rigidSolidSystems.push_back(sistmaSolidoRigidos);
+	rigidSolidSystems.push_back(sistmaSolidoRigidos2);
+	rigidSolidSystems.push_back(sistmaSolidoRigidos3);
+	rigidSolidSystems.push_back(sistmaSolidoRigidos4);
 }

@@ -40,11 +40,7 @@ ContactReportCallback gContactReportCallback;
 
 Game* _game; // Gestiona funcionamiento del juego
 
-// Suelo
 
-PxRigidStatic* suelo = nullptr;
-PxShape* sueloShape =nullptr;
-RenderItem* sueloRenderItem = nullptr;
 
 // Initialize physics engine
 void initPhysics(bool interactive)
@@ -73,12 +69,6 @@ void initPhysics(bool interactive)
 	// Inicializar game
 	_game = new Game(gPhysics, gScene);
 
-	// Creo suelo
-	//suelo = gPhysics->createRigidStatic(PxTransform({ 0,0,0 }));
-	//sueloShape = CreateShape(PxBoxGeometry(100, 0.1, 100));
-	//suelo->attachShape(*sueloShape);
-	//gScene->addActor(*suelo);
-	//sueloRenderItem = new RenderItem(sueloShape, suelo, { 0,1,0.3,1 });
 }
 
 
@@ -113,11 +103,6 @@ void cleanupPhysics(bool interactive)
 	transport->release();
 
 	gFoundation->release();
-
-	// Borro suelo // EL SUELO SE ELIMINA SOLO?
-	//suelo->release(); 
-	//sueloShape->release();
-	//sueloRenderItem->release();
 
 	delete _game;
 }

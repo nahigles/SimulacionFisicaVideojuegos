@@ -19,6 +19,7 @@ protected:
 	const int maxNumElements = 100;
 	const int maxMass = 15;
 	int numElements;
+	float s;
 
 	Vector3 initialPos;
 	Vector3 initialVel;
@@ -57,7 +58,7 @@ protected:
 	physx::PxScene* gScene = nullptr;
 
 public:
-	RigidSolidSystem(physx::PxPhysics* physics, physx::PxScene* scene, Vector3 pos, Vector3 vel, double timeBetween, Vector3 positionVariation = {0,0,0}, Vector3 velocityVariation = {0,0,0}, RS_Type t = BASIC, Vector4 color = { 1,1,1,1 }, bool direction = false);
+	RigidSolidSystem(physx::PxPhysics* physics, physx::PxScene* scene, Vector3 pos, Vector3 vel, double timeBetween, Vector3 positionVariation = {0,0,0}, Vector3 velocityVariation = {0,0,0}, float size = 1, RS_Type t = BASIC, Vector4 color = { 1,1,1,1 }, bool direction = false);
 	void update(double t);
 	~RigidSolidSystem();
 	void addForceGenerator(ForceGenerator* fGenerator);

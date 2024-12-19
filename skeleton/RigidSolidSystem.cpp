@@ -1,6 +1,6 @@
 #include "RigidSolidSystem.h"
 
-RigidSolidSystem::RigidSolidSystem(physx::PxPhysics* physics, physx::PxScene* scene, Vector3 pos, Vector3 vel, double timeBetween, Vector3 positionVariation, Vector3 velocityVariation, RS_Type t, Vector4 color, bool direction)
+RigidSolidSystem::RigidSolidSystem(physx::PxPhysics* physics, physx::PxScene* scene, Vector3 pos, Vector3 vel, double timeBetween, Vector3 positionVariation, Vector3 velocityVariation, float size, RS_Type t, Vector4 color, bool direction)
 {
 	numElements = 0;
 	timeCont = 0;
@@ -13,6 +13,7 @@ RigidSolidSystem::RigidSolidSystem(physx::PxPhysics* physics, physx::PxScene* sc
 	gPhysics = physics;
 	gScene = scene;
 	type = t;
+	s = size;
 	this->color = color;
 	indexColor = 0;
 }
@@ -97,7 +98,7 @@ void RigidSolidSystem::createRigidSolid()
 
 
 	// RIGID SOLID
-	RigidSolid* rS = new RigidSolid(gPhysics, gScene, distrMass(gen), {0.5,0.5,0.5}, newPosition, color, 20, 2);
+	RigidSolid* rS = new RigidSolid(gPhysics, gScene, distrMass(gen), {0.5,0.5,0.5}, newPosition, color, 15, s);
 	rS->setVelocity(nerwVelocity);
 
 	// Añado generadores de fuerzas a los solidos rigidos

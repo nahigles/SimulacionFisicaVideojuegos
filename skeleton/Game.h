@@ -23,6 +23,7 @@ enum State
 	START,
 	E_FLOTACION,
 	E_COLUMNA_AIRE,
+	E_BOLAS_LOKAS,
 	E_EXPLOSION_MOTOR,
 	GAME,
 	FORCES,
@@ -71,6 +72,10 @@ protected:
 	// Otras fuerzas
 	WindForceGenerator* windForceGenerator = nullptr;
 	WindForceGenerator* windForceGeneratorPelota = nullptr;
+	WindForceGenerator* windForceGeneratorBolas1 = nullptr;
+	WindForceGenerator* windForceGeneratorBolas2 = nullptr;
+	WindForceGenerator* windForceGeneratorBolas3 = nullptr;
+	WindForceGenerator* windForceGeneratorBolas4 = nullptr;
 	TornadoForceGenerator* tornadoForceGenerator = nullptr;
 	BlastForceGenerator* blastForceGenerator = nullptr;
 	SpringForceGenerator* springForceGenerator1 = nullptr;
@@ -78,6 +83,12 @@ protected:
 	AnchoredSpringForceGenerator* anchoredSpringForceGenerator = nullptr;
 	BouyancyForceGenerator* bouyancyForceGenerator = nullptr;
 
+	// Base experimento Bolas lokas
+	PxRigidStatic* baseEstatica = nullptr;
+	PxShape* baseEstaticaShape = nullptr;
+	RenderItem* baseEstaticaRenderItem = nullptr;
+
+	
 
 public:
 	Game(physx::PxPhysics* physics, physx::PxScene* scene);
@@ -95,5 +106,6 @@ protected:
 	void updateElements(double t);
 	void experimentoColumnaAireInit();
 	void experimentoFlotacionInit();
+	void experimentoBolasLokasInit();
 };
 
