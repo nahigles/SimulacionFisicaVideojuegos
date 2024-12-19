@@ -8,7 +8,8 @@
 
 enum RS_Type {
 	BASIC,
-	COLOR
+	COLOR,
+	CUADRADO
 };
 
 class RigidSolidSystem

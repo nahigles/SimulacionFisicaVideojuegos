@@ -17,9 +17,6 @@
 #include "ParticleSystem.h"
 #include "Game.h"
 
-std::string display_text = "This is a test";
-
-
 using namespace physx;
 using namespace std;
 
@@ -114,13 +111,13 @@ void keyPress(unsigned char key, const PxTransform& camera)
 
 	switch (toupper(key))
 	{
+		// Estado siguiente
 	case 'N': {
-		cout << "Pasoo de estado" << endl;
 		_game->nextState();
 		break;
 	}
+		// Estado anterior
 	case 'B': {
-		cout << "Estado anterior" << endl;
 		_game->previousState();
 		break;
 	}

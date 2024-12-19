@@ -286,9 +286,29 @@ void startRender(const PxVec3& cameraEye, const PxVec3& cameraDir, PxReal clipNe
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// Display text
 	glColor4f(1.0f, 0.2f, 0.2f, 1.0f);
-	drawText(display_text, 0, 0);
+	drawText(start_text, 200, 250);
+
+	glColor4f(1.0f, 0.2f, 0.2f, 1.0f);
+	drawText(end_text, 170, 250);
+
+	glColor4f(1.0f, 0.2f, 0.2f, 1.0f);
+	drawText(exp1_text, 10, 10);
+
+	glColor4f(1.0f, 0.2f, 0.2f, 1.0f);
+	drawText(exp2_text, 10, 10);
+
+	glColor4f(1.0f, 0.2f, 0.2f, 1.0f);
+	drawText(exp3_text, 10, 10);
+
+	glColor4f(1.0f, 0.2f, 0.2f, 1.0f);
+	drawText(exp4_text, 10, 10);
+
+	glColor4f(1.0f, 0.2f, 0.2f, 1.0f);
+	drawText(exp5_text, 10, 10);
+
+	glColor4f(1.0f, 0.2f, 0.2f, 1.0f);
+	drawText(exp6_text, 10, 10);
 
 	// Setup camera
 	glMatrixMode(GL_PROJECTION);
@@ -398,7 +418,7 @@ void drawText(const std::string& text, int x, int y)
 	int length = text.length();
 
 	for (int i = 0; i < length; i++) {
-		glutBitmapCharacter(GLUT_BITMAP_9_BY_15, (int)text[i]);
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, (int)text[i]);
 	}
 	glPopMatrix();
 	glMatrixMode(GL_PROJECTION);

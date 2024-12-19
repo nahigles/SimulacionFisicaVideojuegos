@@ -45,8 +45,10 @@ void RigidSolidSystem::update(double t)
 
 RigidSolidSystem::~RigidSolidSystem()
 {
-	for (std::list<RigidSolid*>::iterator it = solidoRigidos.begin(); it != solidoRigidos.end(); ++it)
+	for (std::list<RigidSolid*>::iterator it = solidoRigidos.begin(); it != solidoRigidos.end(); ++it) {
 		delete (*it);
+		*it = nullptr;
+	}
 	solidoRigidos.clear();
 }
 
@@ -90,15 +92,19 @@ void RigidSolidSystem::createRigidSolid()
 	// Velocidad aleatoria
 	Vector3 nerwVelocity = initialVel + Vector3(distrVelX(gen), distrVelY(gen), distrVelZ(gen));
 
+	// Forma
+	ShapeRS forma = SPHERE_RS;
+	
 	// Color
 	if (type == COLOR) {
 		color = colors.at(indexColor);
 		indexColor = (indexColor + 1) % colors.size();
 	}
-
-
+	else if (type == CUADRADO)
+		forma = BOX_RS;
+		
 	// RIGID SOLID
-	RigidSolid* rS = new RigidSolid(gPhysics, gScene, distrMass(gen), {0.5,0.5,0.5}, newPosition, color, 15, s);
+	RigidSolid* rS = new RigidSolid(gPhysics, gScene, distrMass(gen), {0.5,0.5,0.5}, newPosition, color, 5, s, forma);
 	rS->setVelocity(nerwVelocity);
 
 	// Añado generadores de fuerzas a los solidos rigidos

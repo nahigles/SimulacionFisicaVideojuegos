@@ -15,7 +15,7 @@ RigidSolid::RigidSolid(physx::PxPhysics* physics, physx::PxScene* scene, float m
 
 	masa = m;
 	this->size = size;
-	this->density = masa/getVolume(); // Formula densidad d = m/v
+	this->density = masa / getVolume(); // Formula densidad d = m/v
 	alive = true;
 	this->lifeTime = lifeTime;
 
@@ -46,14 +46,14 @@ RigidSolid::RigidSolid(physx::PxPhysics* physics, physx::PxScene* scene, float m
 	renderItem = new RenderItem(shape, rigidbody, color);
 
 	// Distribucion de masas y momentos de inercia
-//	if (s == SPHERE_RS)
+	if (s == SPHERE_RS)
 		PxRigidBodyExt::updateMassAndInertia(*rigidbody, density);
-	//else if (s == BOX_RS) {
-	//	float iH = (1 / 12) * masa * (size * size + size * size); // Alto
-	//	float iW = (1 / 12) * masa * (size * size + size * size); // Ancho
-	//	float iD = (1 / 12) * masa * (size * size + size * size); // Profundo
-	//	rigidbody->setMassSpaceInertiaTensor({iH,iW,iD});
-	//}
+	else if (s == BOX_RS) {
+		float iH = (1 / 12) * masa * (size * size + size * size); // Alto
+		float iW = (1 / 12) * masa * (size * size + size * size); // Ancho
+		float iD = (1 / 12) * masa * (size * size + size * size); // Profundo
+		rigidbody->setMassSpaceInertiaTensor({ iH,iW,iD });
+	}
 
 	masa = rigidbody->getMass();
 }
@@ -61,11 +61,18 @@ RigidSolid::RigidSolid(physx::PxPhysics* physics, physx::PxScene* scene, float m
 RigidSolid::~RigidSolid()
 {
 	if (renderItem != nullptr) {
+		//renderItem->release();
 		DeregisterRenderItem(renderItem);
 		renderItem = nullptr;
 	}
-	//shape->release();
-	//static_cast<physx::PxRigidDynamic*>(rigidbody)->release();
+	if (shape != nullptr) {
+		shape->release();
+		shape = nullptr;
+	}
+	if (rigidbody != nullptr) {
+		static_cast<physx::PxRigidDynamic*>(rigidbody)->release();
+		rigidbody = nullptr;
+	}
 }
 
 void RigidSolid::update(double t)
@@ -97,7 +104,7 @@ void RigidSolid::setPosition(Vector3 p)
 
 void RigidSolid::setInertia(Vector3 i)
 {
-	
+
 }
 
 void RigidSolid::addForce(Vector3 f)
