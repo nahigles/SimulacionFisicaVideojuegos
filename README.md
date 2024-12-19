@@ -15,7 +15,7 @@ El nombre del proyecto viene de las fuerzas físicas que no puedes ver pero que 
 ## Controles
 - N → Cambiar al siguiente experimento 
 - B → Cambiar al experimento anterior
-- P → Pausar y despausar
+- P → Pausar y reanudar
 - F → Cambiar gravedad en la pantalla de inicio
 - X → Activar explosión en el Experimento 6 (Cilindro motor)
 - C → Reiniciar Experimento 6 (Cilindro motor)
